@@ -1,5 +1,6 @@
 <script>
 /* Seletor global de linguagem do código (Python / R).
+   Aparece em DOIS lugares: topo do índice lateral e na navbar (canto direito).
    A escolha é lembrada em localStorage e vale para todas as páginas. */
 (function () {
   var KEY = "code-lang";
@@ -26,37 +27,70 @@
     apply(l);
   }
 
-  function build() {
-    // Só mostra o seletor se a página realmente tiver blocos em mais de uma linguagem.
-    if (!document.querySelector(".lang-python") && !document.querySelector(".lang-r")) return;
-    if (document.querySelector(".lang-switch")) return;
+  function makeButtons() {
+    var wrap = document.createElement("div");
+    wrap.className = "lang-switch-btns";
+    for (var i = 0; i < LANGS.length; i++) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "lang-btn";
+      b.setAttribute("data-lang", LANGS[i]);
+      b.textContent = LABELS[LANGS[i]];
+      wrap.appendChild(b);
+    }
+    return wrap;
+  }
 
+  function buildSidebar() {
     var host = document.querySelector(".sidebar") ||
-               document.querySelector(".sidebar-menu-container") ||
-               document.querySelector(".quarto-document-content") ||
-               document.body;
+               document.querySelector(".sidebar-menu-container");
+    if (!host || host.querySelector(".lang-switch")) return;
+    var box = document.createElement("div");
+    box.className = "lang-switch lang-switch-sidebar";
+    var lab = document.createElement("span");
+    lab.className = "lang-switch-label";
+    lab.textContent = "Linguagem do código";
+    box.appendChild(lab);
+    box.appendChild(makeButtons());
+    host.insertBefore(box, host.firstChild);
+  }
+
+  function buildNavbar() {
+    if (document.querySelector(".navbar .lang-switch")) return;
+    var gh = document.querySelector('.navbar a[href*="github.com"]');
+    var ghLi = gh ? gh.closest("li") : null;
+    var navUl = document.querySelector(".navbar-nav.navbar-right") ||
+                document.querySelector(".navbar-collapse .navbar-nav");
 
     var box = document.createElement("div");
-    box.className = "lang-switch";
+    box.className = "lang-switch lang-switch-nav";
+    box.appendChild(makeButtons());
 
-    var html = '<span class="lang-switch-label">Linguagem do código</span>' +
-               '<div class="lang-switch-btns">';
-    for (var i = 0; i < LANGS.length; i++) {
-      html += '<button type="button" class="lang-btn" data-lang="' + LANGS[i] + '">' +
-              LABELS[LANGS[i]] + '</button>';
-    }
-    html += "</div>";
-    box.innerHTML = html;
-
-    host.insertBefore(box, host.firstChild);
-
-    var btns = box.querySelectorAll(".lang-btn");
-    for (var j = 0; j < btns.length; j++) {
-      btns[j].addEventListener("click", function () {
-        setLang(this.getAttribute("data-lang"));
-      });
+    if (ghLi && ghLi.parentElement) {
+      var li = document.createElement("li");
+      li.className = "nav-item lang-switch-nav-item";
+      li.appendChild(box);
+      ghLi.parentElement.insertBefore(li, ghLi);
+    } else if (navUl) {
+      var li2 = document.createElement("li");
+      li2.className = "nav-item lang-switch-nav-item";
+      li2.appendChild(box);
+      navUl.appendChild(li2);
     }
   }
+
+  function build() {
+    // Só mostra se a página realmente tiver blocos em mais de uma linguagem.
+    if (!document.querySelector(".lang-python") && !document.querySelector(".lang-r")) return;
+    buildSidebar();
+    buildNavbar();
+  }
+
+  // Delegação de evento: funciona para os botões dos dois seletores.
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest(".lang-btn") : null;
+    if (b) { e.preventDefault(); setLang(b.getAttribute("data-lang")); }
+  });
 
   document.addEventListener("DOMContentLoaded", function () {
     build();

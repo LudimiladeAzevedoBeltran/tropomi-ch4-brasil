@@ -370,3 +370,9 @@ html[data-code-lang="r"] .lang-python { display: none; }
 }
 .lang-btn:hover { background: var(--tch-moss-tint); border-color: var(--tch-moss-soft); }
 .lang-btn.active { background: var(--tch-moss); border-color: var(--tch-moss); color: var(--tch-bg2); }
+
+/* Seletor na navbar (canto direito) */
+.lang-switch-nav { margin: 0 .35rem; padding: 0; border: 0; }
+.lang-switch-nav .lang-switch-btns { gap: .25rem; }
+.lang-switch-nav .lang-btn { padding: 3px 10px; font-size: 10.5px; }
+.lang-switch-nav-item { display: flex; align-items: center; }
