@@ -1,0 +1,66 @@
+<script>
+/* Seletor global de linguagem do código (Python / R).
+   A escolha é lembrada em localStorage e vale para todas as páginas. */
+(function () {
+  var KEY = "code-lang";
+  var LANGS = ["python", "r"];
+  var LABELS = { python: "Python", r: "R" };
+
+  function getLang() {
+    try {
+      var v = localStorage.getItem(KEY);
+      return LANGS.indexOf(v) >= 0 ? v : "python";
+    } catch (e) { return "python"; }
+  }
+
+  function apply(l) {
+    document.documentElement.setAttribute("data-code-lang", l);
+    var btns = document.querySelectorAll(".lang-btn");
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle("active", btns[i].getAttribute("data-lang") === l);
+    }
+  }
+
+  function setLang(l) {
+    try { localStorage.setItem(KEY, l); } catch (e) {}
+    apply(l);
+  }
+
+  function build() {
+    // Só mostra o seletor se a página realmente tiver blocos em mais de uma linguagem.
+    if (!document.querySelector(".lang-python") && !document.querySelector(".lang-r")) return;
+    if (document.querySelector(".lang-switch")) return;
+
+    var host = document.querySelector(".sidebar") ||
+               document.querySelector(".sidebar-menu-container") ||
+               document.querySelector(".quarto-document-content") ||
+               document.body;
+
+    var box = document.createElement("div");
+    box.className = "lang-switch";
+
+    var html = '<span class="lang-switch-label">Linguagem do código</span>' +
+               '<div class="lang-switch-btns">';
+    for (var i = 0; i < LANGS.length; i++) {
+      html += '<button type="button" class="lang-btn" data-lang="' + LANGS[i] + '">' +
+              LABELS[LANGS[i]] + '</button>';
+    }
+    html += "</div>";
+    box.innerHTML = html;
+
+    host.insertBefore(box, host.firstChild);
+
+    var btns = box.querySelectorAll(".lang-btn");
+    for (var j = 0; j < btns.length; j++) {
+      btns[j].addEventListener("click", function () {
+        setLang(this.getAttribute("data-lang"));
+      });
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    build();
+    apply(getLang());
+  });
+})();
+</script>

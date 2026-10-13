@@ -320,3 +320,53 @@ table tbody td b, .table td b { color: var(--tch-terra-deep); }
 .sidebar-navigation .active { color: var(--tch-moss) !important; font-weight: 600; }
 .sidebar .sidebar-item-container { border-bottom: 1px solid var(--tch-line-soft); }
 .sidebar { border-right: 1px solid var(--tch-line); }
+
+/* ---------- Seletor de linguagem do código ---------- */
+html[data-code-lang="python"] .lang-r,
+html[data-code-lang="r"] .lang-python { display: none; }
+
+.lang-python::before,
+.lang-r::before {
+  content: "Python";
+  display: inline-block;
+  font-family: var(--tch-mono);
+  font-size: 10.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--tch-terra-deep);
+  background: var(--tch-terra-tint);
+  padding: 2px 10px;
+  border-radius: 999px;
+  margin: .6rem 0 .3rem;
+}
+.lang-r::before { content: "R"; }
+
+.lang-switch {
+  padding: .55rem .8rem;
+  margin: 0 0 .8rem;
+  border-bottom: 1px solid var(--tch-line);
+}
+.lang-switch-label {
+  display: block;
+  font-family: var(--tch-mono);
+  font-size: 10.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--tch-ink-soft);
+  margin-bottom: .4rem;
+}
+.lang-switch-btns { display: flex; gap: .35rem; flex-wrap: wrap; }
+.lang-btn {
+  font-family: var(--tch-mono);
+  font-size: 11px;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  border: 1px solid var(--tch-line);
+  background: var(--tch-surface);
+  color: var(--tch-moss-deep);
+  border-radius: 6px;
+  padding: 4px 12px;
+  cursor: pointer;
+}
+.lang-btn:hover { background: var(--tch-moss-tint); border-color: var(--tch-moss-soft); }
+.lang-btn.active { background: var(--tch-moss); border-color: var(--tch-moss); color: var(--tch-bg2); }

@@ -7,12 +7,13 @@ A Statistical API agrega no servidor: você recebe a série pronta, sem baixar
 imagens.
 
 ::: {.callout-note}
-Nem todo dia tem observação. A cobertura aumenta ao longo dos anos
-(começa mais baixa em 2019 e se aproxima de 100% nos anos recentes).
+Escolha a linguagem no seletor **"Linguagem do código"** (topo do índice lateral).
+A escolha **vale para todo o site** e fica lembrada entre as páginas.
 :::
 
 ## Código
 
+::: {.lang-python}
 ```python
 import tropomi_ch4 as tch4
 from tropomi_ch4 import plot
@@ -24,6 +25,56 @@ df.to_csv("serie_diaria_ch4_brasil.csv", index=False)
 plot.plot_series(df, title="CH4 médio diário no Brasil — TROPOMI",
                  outfile="serie_diaria_ch4_brasil.png")
 ```
+:::
+
+::: {.lang-r}
+```r
+# install.packages(c("httr", "jsonlite", "dotenv"))
+library(httr); library(jsonlite); library(dotenv)
+load_dot_env()   # carrega o .env
+
+# 1) Token (OAuth client)
+tok <- content(POST(Sys.getenv("CDSE_TOKEN_URL"),
+  body = list(grant_type = "client_credentials",
+              client_id = Sys.getenv("CDSE_CLIENT_ID"),
+              client_secret = Sys.getenv("CDSE_CLIENT_SECRET")),
+  encode = "form"), as = "parsed")$access_token
+
+# 2) Evalscript: lê a banda CH4 (minQa=50) e devolve a média
+evalscript <- paste0(
+  "//VERSION=3\n",
+  "function setup(){return{input:[{bands:[\"CH4\",\"dataMask\"],minQa:50}],",
+  "output:[{id:\"data\",bands:1},{id:\"dataMask\",bands:1}]};}\n",
+  "function evaluatePixel(s){return{data:[s.CH4],dataMask:[s.dataMask]};}")
+
+# 3) Corpo da requisição (série diária sobre o Brasil, 1 ano)
+from <- "2019-01-01T00:00:00Z"; to <- "2019-12-31T23:59:59Z"
+body <- list(
+  input = list(
+    bounds = list(bbox = c(-74, -34, -34, 6),
+                  properties = list(crs = "http://www.opengis.net/def/crs/EPSG/0/4326")),
+    data = list(list(type = "sentinel-5p-l2",
+                     dataFilter = list(timeRange = list(from = from, to = to))))),
+  aggregation = list(timeRange = list(from = from, to = to),
+                     aggregationInterval = list(of = "P1D"),
+                     evalscript = evalscript, resx = 0.1, resy = 0.1),
+  calculations = list(default = list(statistics = list(default = list()))))
+
+resp <- content(POST(Sys.getenv("CDSE_STATS_URL"),
+  add_headers(Authorization = paste("Bearer", tok), `Content-Type` = "application/json"),
+  body = toJSON(body, auto_unbox = TRUE), encode = "raw"), as = "parsed")
+
+# 4) Tabela: data, CH4 (ppb) e nº de pixels válidos
+df <- do.call(rbind, lapply(resp$data, function(it) {
+  st <- it$outputs$data$bands$B0$stats
+  data.frame(data = substr(it$interval$from, 1, 10),
+             ch4_ppb = suppressWarnings(as.numeric(st$mean)),
+             n_validos = st$sampleCount - st$noDataCount)
+}))
+df$data <- as.Date(df$data)
+head(df)
+```
+:::
 
 O `DataFrame` tem as colunas:
 
@@ -36,8 +87,7 @@ O `DataFrame` tem as colunas:
 
 ## O que acontece por baixo
 
-`tch4.daily` chama `statistical_series("P1D", ...)`, que envia um corpo JSON
-com a caixa do Brasil, o período e um **evalscript** que lê a banda `CH4`
-(com filtro de qualidade) e faz a média.
+A chamada usa a **Statistical API** com a caixa do Brasil, o período e um
+**evalscript** que lê a banda `CH4` (com filtro de qualidade) e calcula a média.
 
 Notebook pronto: [`notebooks/01_diaria.ipynb`](https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil/blob/main/notebooks/01_diaria.ipynb).

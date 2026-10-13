@@ -80,3 +80,5 @@ format:
     lang: pt
     css: styles.css
     link-external-newwindow: true
+    include-in-header: lang-head.html
+    include-after-body: lang-switch.html

@@ -1,0 +1,12 @@
+<script>
+/* Aplica a linguagem de código escolhida ANTES da página renderizar (evita piscar). */
+(function () {
+  try {
+    var v = localStorage.getItem("code-lang");
+    if (v !== "python" && v !== "r") v = "python";
+    document.documentElement.setAttribute("data-code-lang", v);
+  } catch (e) {
+    document.documentElement.setAttribute("data-code-lang", "python");
+  }
+})();
+</script>
