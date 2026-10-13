@@ -247,3 +247,76 @@ table tbody td b, .table td b { color: var(--tch-terra-deep); }
   transform: translateY(-2px);
   text-decoration: none;
 }
+
+/* ---------- Capa (home) ---------- */
+#capa { padding: clamp(28px, 5vw, 54px) 0 12px; }
+
+#capa .kicker {
+  font-family: var(--tch-mono);
+  font-size: 12px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--tch-terra);
+  margin: 0 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#capa .kicker::before {
+  content: "";
+  width: 34px;
+  height: 1px;
+  background: var(--tch-terra);
+}
+
+#capa .capa-title {
+  font-family: var(--tch-serif);
+  font-weight: 600;
+  font-size: clamp(30px, 5vw, 50px);
+  line-height: 1.06;
+  margin: 0 0 12px;
+  color: var(--tch-ink);
+  max-width: 22ch;
+}
+#capa .capa-title .accent { color: var(--tch-moss); }
+
+#capa .capa-sub {
+  font-size: 19.5px;
+  color: var(--tch-ink-soft);
+  font-style: italic;
+  max-width: 64ch;
+  margin: 6px 0 0;
+}
+
+#capa .capa-fatos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 24px;
+  border-top: 1px solid var(--tch-line);
+  padding-top: 16px;
+}
+#capa .fato {
+  font-family: var(--tch-mono);
+  font-size: 12px;
+  letter-spacing: .02em;
+  color: var(--tch-ink-soft);
+}
+#capa .fato b { color: var(--tch-terra); font-weight: 500; }
+
+/* ---------- Índice lateral (sidebar) ---------- */
+.sidebar, .sidebar-navigation { font-family: var(--tch-mono); font-size: 12.5px; }
+.sidebar-title { font-family: var(--tch-serif); color: var(--tch-moss-deep); }
+.sidebar-section .sidebar-item-text,
+.sidebar-section > .sidebar-item-container .sidebar-item-text {
+  font-family: var(--tch-mono);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--tch-terra-deep) !important;
+  font-weight: 600;
+}
+.sidebar-navigation a { color: var(--tch-ink-soft); }
+.sidebar-navigation a:hover { color: var(--tch-moss); }
+.sidebar-navigation .active { color: var(--tch-moss) !important; font-weight: 600; }
+.sidebar .sidebar-item-container { border-bottom: 1px solid var(--tch-line-soft); }
+.sidebar { border-right: 1px solid var(--tch-line); }

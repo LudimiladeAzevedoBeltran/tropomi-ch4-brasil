@@ -1,12 +1,15 @@
----
-title: "TROPOMI CH4 Brasil"
----
-
-::: {.hero}
-Tutorial e código aberto para obter e analisar a concentração de **metano (CH4)** do
-satélite **Sentinel-5P (TROPOMI)** sobre o **Brasil**, em escalas **diária**, **mensal**
-e **anual**, além de mapas em ~1 km.
-:::
+<div id="capa">
+  <p class="kicker">Tutorial aberto · Sentinel-5P · Metano (CH4)</p>
+  <h1 class="capa-title">Metano no Brasil, do zero ao mapa <span class="accent">— com o TROPOMI</span></h1>
+  <p class="capa-sub">Tutorial e código para baixar e analisar a concentração de CH4 do satélite
+  Sentinel-5P sobre o Brasil, em escala diária, mensal e anual — e mapas de ~1 km.</p>
+  <div class="capa-fatos">
+    <span class="fato"><b>3 escalas</b> · diária, mensal, anual</span>
+    <span class="fato"><b>mapas ~1 km</b> · L2 cru e GEE</span>
+    <span class="fato"><b>PT + EN</b></span>
+    <span class="fato"><b>dados abertos</b> · Copernicus</span>
+  </div>
+</div>
 
 ## Escolha o idioma / Choose your language
 

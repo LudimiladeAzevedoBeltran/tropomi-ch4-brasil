@@ -19,6 +19,53 @@ website:
     right:
       - icon: github
         href: https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil
+  sidebar:
+    style: docked
+    search: true
+    collapse-level: 1
+    contents:
+      - text: "Início"
+        href: index.qmd
+      - section: "Português"
+        contents:
+          - text: "1) Conta e credenciais"
+            href: pt/01-conta-copernicus.qmd
+          - text: "2) Links da API"
+            href: pt/02-links-api.qmd
+          - text: "3) Série diária"
+            href: pt/03-diaria.qmd
+          - text: "4) Série mensal"
+            href: pt/04-mensal.qmd
+          - text: "5) Série anual"
+            href: pt/05-anual.qmd
+          - text: "6) Mapas — L2 cru"
+            href: pt/06-mapas-l2.qmd
+          - text: "7) Mapas — GEE"
+            href: pt/07-mapas-gee.qmd
+          - text: "8) Segurança"
+            href: pt/08-seguranca.qmd
+          - text: "9) Citação e licença"
+            href: pt/09-citacao.qmd
+      - section: "English"
+        contents:
+          - text: "1) Account & credentials"
+            href: en/01-conta-copernicus.qmd
+          - text: "2) API links"
+            href: en/02-links-api.qmd
+          - text: "3) Daily series"
+            href: en/03-diaria.qmd
+          - text: "4) Monthly series"
+            href: en/04-mensal.qmd
+          - text: "5) Annual series"
+            href: en/05-anual.qmd
+          - text: "6) Maps — raw L2"
+            href: en/06-mapas-l2.qmd
+          - text: "7) Maps — GEE"
+            href: en/07-mapas-gee.qmd
+          - text: "8) Security"
+            href: en/08-seguranca.qmd
+          - text: "9) Citation & license"
+            href: en/09-citacao.qmd
   page-footer:
     left: "**TROPOMI CH4 Brasil** — Ludimila de Azevedo Beltran"
     right: "[MIT](https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil/blob/main/LICENSE) (código) · [CC BY 4.0](https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil/blob/main/LICENSE-docs) (texto)"
