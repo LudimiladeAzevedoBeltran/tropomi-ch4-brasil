@@ -21,12 +21,14 @@ except ImportError:  # python-dotenv é opcional na importação
 # Caixa (bounding box) aproximada do Brasil: [lon_min, lat_min, lon_max, lat_max]
 BRAZIL_BBOX: list[float] = [-74.0, -34.0, -34.0, 6.0]
 
-# Endpoints padrão da API Copernicus (CDSE / Sentinel Hub).
+# Endpoints da API Copernicus. Defina os seus no .env (ver .env.example).
+# Encontrar link válido: consulte a documentação do provedor.
+PLACEHOLDER = "INSIRA_AQUI"
 DEFAULT_ENDPOINTS = {
-    "token": "https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token",
-    "statistics": "https://sh.dataspace.copernicus.eu/api/v1/statistics",
-    "catalog": "https://catalogue.dataspace.copernicus.eu/odata/v1/Products",
-    "download": "https://download.dataspace.copernicus.eu/odata/v1/Products",
+    "token": PLACEHOLDER,
+    "statistics": PLACEHOLDER,
+    "catalog": PLACEHOLDER,
+    "download": PLACEHOLDER,
 }
 
 _PLACEHOLDERS = {"", "COLE_SEU_CLIENT_ID", "COLE_SEU_CLIENT_SECRET", "SUA_SENHA"}
@@ -87,13 +89,26 @@ def get_login() -> Credentials:
 
 
 def endpoints() -> dict[str, str]:
-    """Endpoints da API, permitindo sobrescrever via variáveis de ambiente."""
-    return {
+    """Endpoints da API (lidos do .env).
+
+    Levanta ``RuntimeError`` com mensagem clara se algum endpoint não estiver
+    definido — os links reais não vêm no código; preencha o seu `.env`.
+    """
+    eps = {
         "token": os.getenv("CDSE_TOKEN_URL", DEFAULT_ENDPOINTS["token"]),
         "statistics": os.getenv("CDSE_STATS_URL", DEFAULT_ENDPOINTS["statistics"]),
         "catalog": os.getenv("CDSE_CATALOG_URL", DEFAULT_ENDPOINTS["catalog"]),
         "download": os.getenv("CDSE_DOWNLOAD_URL", DEFAULT_ENDPOINTS["download"]),
     }
+    faltando = [k for k, v in eps.items() if not v or v == PLACEHOLDER]
+    if faltando:
+        raise RuntimeError(
+            "Endpoints nao definidos: "
+            + ", ".join(faltando)
+            + ". Defina CDSE_TOKEN_URL, CDSE_STATS_URL, CDSE_CATALOG_URL e "
+            "CDSE_DOWNLOAD_URL no .env (encontre os links validos na documentacao do provedor)."
+        )
+    return eps
 
 
 def output_dir() -> Path:
