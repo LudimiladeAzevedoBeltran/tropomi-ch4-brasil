@@ -1,0 +1,35 @@
+---
+title: "9) Citation and license"
+lang: en
+---
+
+## How to cite
+
+If this material helped your research, teaching or project:
+
+> Beltran, L. A. (2026). *TROPOMI CH4 Brasil: tutorial e código para séries de
+> metano do Sentinel-5P*. https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil
+
+The [`CITATION.cff`](https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil/blob/main/CITATION.cff)
+file lets GitHub generate the citation (a **"Cite this repository"** button).
+
+## Licenses
+
+| Content | License |
+|---|---|
+| Code (`tropomi_ch4/`, notebooks) | **MIT** |
+| Text and figures (this site, README) | **CC BY 4.0** |
+
+- MIT: use, modify and share the code, keeping the copyright notice.
+- CC BY 4.0: reuse the text/figures **crediting the author**.
+
+## Data
+
+Sentinel-5P/TROPOMI — **ESA / Copernicus**. Accessed via Copernicus Data Space
+Ecosystem (Statistical API) and Google Earth Engine. Check the providers' terms
+when redistributing data.
+
+## Author
+
+**Ludimila de Azevedo Beltran**
+ORCID: [0009-0003-5070-9472](https://orcid.org/0009-0003-5070-9472)

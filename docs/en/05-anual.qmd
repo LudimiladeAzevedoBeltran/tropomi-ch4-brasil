@@ -1,0 +1,38 @@
+---
+title: "5) Annual series"
+lang: en
+---
+
+The **annual** scale summarizes the series into one value per year — useful for
+trends. Here it is **derived from the monthly** series (mean of the valid months
+of each year).
+
+## Code
+
+```python
+import tropomi_ch4 as tch4
+from tropomi_ch4 import plot
+
+df = tch4.annual(start="2019-01-01", end=None)
+df.to_csv("serie_anual_ch4_brasil.csv", index=False)
+
+plot.plot_series(df, title="Annual mean CH4 over Brazil — TROPOMI",
+                 outfile="serie_anual_ch4_brasil.png")
+```
+
+## What about the API's `P1Y`?
+
+The Statistical API accepts ISO 8601 periods. `P1D` and `P1M` work reliably; the
+**`P1Y` (annual) granularity needs verification** for your use case.
+[requer verificação]
+
+So the recommended path is to derive the annual from the monthly:
+
+- fewer requests and less dependence on API behavior;
+- you control how missing months are handled;
+- the annual mean is reproducible from the monthly series.
+
+If `P1Y` works in your test, use it; `annual` can be swapped for a direct call to
+`statistical_series("P1Y", ...)`.
+
+Notebook: [`notebooks/03_anual.ipynb`](https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil/blob/main/notebooks/03_anual.ipynb).

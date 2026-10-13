@@ -1,0 +1,38 @@
+---
+title: "4) Monthly series"
+lang: en
+---
+
+**Monthly** mean (`P1M`) of CH4 over Brazil. Unlike the daily series, it fits in
+a **single request** for the whole period.
+
+## Code
+
+```python
+import tropomi_ch4 as tch4
+from tropomi_ch4 import plot
+
+df = tch4.monthly(start="2019-01-01", end=None)   # None = up to current month
+df.to_csv("serie_mensal_ch4_brasil.csv", index=False)
+
+plot.plot_series(df, title="Monthly mean CH4 over Brazil — TROPOMI",
+                 outfile="serie_mensal_ch4_brasil.png")
+```
+
+## Filtering weak months
+
+Some months have few valid pixels. It is good practice to drop them:
+
+```python
+df_bom = df[df["n_validos"] > 200]
+```
+
+## Daily vs. monthly
+
+| | Daily | Monthly |
+|---|---|---|
+| Granularity | `P1D` | `P1M` |
+| Requests | 1 per year | 1 total |
+| Typical use | fine seasonality, events | trends, long series |
+
+Notebook: [`notebooks/02_mensal.ipynb`](https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil/blob/main/notebooks/02_mensal.ipynb).

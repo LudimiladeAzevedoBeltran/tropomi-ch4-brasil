@@ -1,0 +1,69 @@
+---
+title: "6) Maps with raw L2"
+lang: en
+---
+
+For monthly **maps** at ~1 km, the API series are not enough: you need the
+**raw L2** product (`L2__CH4___`), which delivers each orbit as a file.
+
+## ⚠️ How the L2 works (read first)
+
+::: {.callout-important}
+### Downloads the COMPLETE file → crops to the Brazil mask → **DELETES the complete file**
+
+The flow downloads the **complete granule** (a `.nc` file of ~70 MB, covering a
+strip of the globe), uses only the pixels of the **Brazil region**, accumulates
+the monthly mean, and then **deletes the complete file**.
+
+In other words: **the full file is temporary**. Only the **already-cropped
+monthly GeoTIFF** (~1 km) is kept. So even when processing months of data, the
+**disk usage stays small** — there is only 1 granule at a time.
+:::
+
+Also important:
+
+- The real cost is **bandwidth/time**, not disk: about **~6 GB of download per
+  month** and **~20–25 min** of processing per month.
+- If the run is interrupted, just run it again: it **resumes** (finished months
+  are skipped).
+
+## Requirements
+
+```bash
+pip install -e ".[l2]"
+```
+
+Set the account login in `.env` (`CDSE_USERNAME`, `CDSE_PASSWORD`) — see
+[Copernicus account](01-conta-copernicus.qmd).
+
+## Code
+
+```python
+from tropomi_ch4 import l2
+
+# One test month (limit the number of granules)
+media = l2.build_monthly_geotiff(
+    year=2022, month=1,
+    out_tif="l2_mensal/CH4_2022_01.tif",
+    res=0.01,          # ~1 km
+    max_granules=5,    # remove/None for the whole month
+)
+print("mean CH4 (ppb):", media)
+```
+
+For several months, repeat in a loop. The GeoTIFF is `EPSG:4326`, `nodata=NaN`,
+*deflate*-compressed.
+
+## Step by step
+
+1. `list_granules` lists the month's granules in the OData catalog.
+2. `download` downloads the complete granule (streaming).
+3. `accumulate_granule` reads `methane_mixing_ratio_bias_corrected` and
+   `qa_value`, filters by quality and **accumulates only the Brazil pixels**.
+4. The complete granule is **deleted** (`finally: fn.unlink()`).
+5. At the end of the month, the accumulated mean becomes the **cropped GeoTIFF**.
+
+::: {.callout-note}
+The Statistical API (series) does not deliver good **maps** for S5P: the spatial
+coverage is irregular. For maps, use the raw L2 (this page) or GEE (next).
+:::

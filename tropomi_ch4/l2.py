@@ -1,7 +1,10 @@
 """L2 cru do Sentinel-5P/TROPOMI via CDSE (mapas em ~1 km).
 
-Baixa os *granules* L2 um a um, recorta à caixa do Brasil, acumula a média
-mensal e apaga o arquivo grande — assim o disco usado é pequeno.
+Fluxo (importante): para cada *granule*, o arquivo **completo** (~70 MB) é
+baixado, os pixels da **região do Brasil** são acumulados, e o arquivo **completo
+é EXCLUÍDO** em seguida. Só o **GeoTIFF mensal já recortado** fica salvo — por
+isso o disco usado é pequeno (existe 1 granule por vez). O custo real é
+banda/tempo (~6 GB e ~20-25 min por mês).
 
 Requer as dependências opcionais: ``h5py``, ``rasterio``
 (``pip install -e ".[l2]"``).

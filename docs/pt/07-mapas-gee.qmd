@@ -6,6 +6,28 @@ Alternativa ao L2 cru: usar o produto **L3** já gradeado
 (`COPERNICUS/S5P/OFFL/L3_CH4`) no **Google Earth Engine (GEE)**, exportando por
 **tarefas em lote** (evita `Computation timed out` / `user memory limit`).
 
+## ⚠️ Créditos e limites do Earth Engine (leia antes)
+
+::: {.callout-important}
+### Você PRECISA de cota/créditos para exportar
+
+Cada export no GEE é uma **tarefa em fila** e **consome cota do projeto**. Se o
+seu projeto **não tiver créditos/cota disponível**, as tarefas:
+
+- **não rodam** ou ficam presas em `READY`/`RUNNING` por muito tempo;
+- podem levar **meses** para concluir um período grande (2019 → hoje são ~90
+  tarefas mensais).
+
+Antes de disparar o período inteiro, **confirme sua cota** e rode **um único mês
+de teste**.
+:::
+
+::: {.callout-tip}
+Se a cota estiver esgotada, use o **L2 cru** ([página anterior](06-mapas-l2.qmd)):
+ele não depende de créditos do GEE, apenas do seu login no CDSE (o custo é
+banda/tempo).
+:::
+
 ## Pré-requisitos
 
 ```bash
@@ -36,7 +58,7 @@ DRIVE_FOLDER = "CH4_TROPOMI_Brasil"
 brasil = (ee.FeatureCollection("FAO/GAUL/2015/level0")
           .filter(ee.Filter.eq("ADM0_NAME", "Brazil")).geometry())
 
-# Exemplo: um mês -> GeoTIFF no Drive
+# Exemplo: UM mês -> GeoTIFF no Drive (teste antes do período todo)
 ini = ee.Date.fromYMD(2022, 1, 1)
 img = (ee.ImageCollection(COLLECTION)
        .filterDate(ini, ini.advance(1, "month"))
@@ -48,10 +70,11 @@ geemap.ee_export_image_to_drive(
     scale=1113.2, crs="EPSG:4326", fileFormat="GeoTIFF")
 ```
 
-Acompanhe as tarefas em <https://code.earthengine.google.com/tasks>. Depois,
-baixe os `.tif` do Drive (manualmente ou com `gdown`) para uma pasta local.
+Acompanhe as tarefas e o **consumo/limite** em
+<https://code.earthengine.google.com/tasks>. Depois, baixe os `.tif` do Drive
+(manualmente ou com `gdown`) para uma pasta local.
 
-::: {.callout-tip}
-Antes de exportar 2019→hoje (~90 meses), teste com um único mês para confirmar
-que os arquivos aparecem no Drive.
+::: {.callout-warning}
+Se as tarefas ficarem paradas, provavelmente é **cota**. Verifique o limite do
+projeto antes de insistir — não adianta reenviar, só ocupa a fila.
 :::

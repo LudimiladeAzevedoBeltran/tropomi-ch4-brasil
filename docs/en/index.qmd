@@ -4,15 +4,17 @@ lang: en
 ---
 
 This tutorial explains, from scratch, how to download and analyze **methane
-(CH4)** from **Sentinel-5P/TROPOMI** over **Brazil**.
+(CH4)** from **Sentinel-5P/TROPOMI** over **Brazil**. Follow in order:
 
-::: {.callout-note}
-The English translation is **in progress**. The full tutorial is available in
-[Português](../pt/index.qmd). Pages translated so far are linked below.
-:::
-
-1. [Copernicus account](01-conta-copernicus.qmd)
-2. [API links](02-links-api.qmd)
+1. [Copernicus account](01-conta-copernicus.qmd) — create account and credentials
+2. [API links](02-links-api.qmd) — find the endpoints
+3. [Daily series](03-diaria.qmd) — `P1D`
+4. [Monthly series](04-mensal.qmd) — `P1M`
+5. [Annual series](05-anual.qmd) — derived from monthly
+6. [Maps with raw L2](06-mapas-l2.qmd) — GeoTIFF ~1 km
+7. [Maps with Google Earth Engine](07-mapas-gee.qmd)
+8. [Security](08-seguranca.qmd) — protect your credentials
+9. [Citation and license](09-citacao.qmd)
 
 ## Requirements
 

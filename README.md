@@ -34,7 +34,9 @@ tropomi-ch4-brasil/
 ├─ notebooks/             # uma escala por notebook
 │  ├─ 01_diaria.ipynb
 │  ├─ 02_mensal.ipynb
-│  └─ 03_anual.ipynb
+│  ├─ 03_anual.ipynb
+│  ├─ 04_mapas_l2.ipynb    # L2 cru (baixa completo -> recorta -> apaga completo)
+│  └─ 05_mapas_gee.ipynb   # GEE (exige cota/créditos; pode demorar meses)
 ├─ docs/                  # site (Quarto) em PT e EN
 ├─ data/                  # dados de exemplo (não versionar dados grandes)
 ├─ requirements.txt

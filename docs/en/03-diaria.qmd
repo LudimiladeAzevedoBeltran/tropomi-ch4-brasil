@@ -1,0 +1,38 @@
+---
+title: "3) Daily series"
+lang: en
+---
+
+**Daily** mean (`P1D`, the finest granularity of the API) of CH4 over Brazil.
+The Statistical API aggregates on the server: you get the series ready, without
+downloading images.
+
+::: {.callout-note}
+Not every day has an observation. Coverage increases over the years (it starts
+lower in 2019 and approaches 100% in recent years).
+:::
+
+## Code
+
+```python
+import tropomi_ch4 as tch4
+from tropomi_ch4 import plot
+
+# One request per year (more robust to failures)
+df = tch4.daily(start="2019-01-01", end=None)   # None = up to today
+df.to_csv("serie_diaria_ch4_brasil.csv", index=False)
+
+plot.plot_series(df, title="Daily mean CH4 over Brazil — TROPOMI",
+                 outfile="serie_diaria_ch4_brasil.png")
+```
+
+Columns:
+
+| Column | Meaning |
+|---|---|
+| `data` | observation date |
+| `ch4_ppb` | mean CH4 (ppb) over Brazil |
+| `n_validos` | number of valid pixels |
+| `ano`, `mes` | helpers |
+
+Notebook: [`notebooks/01_diaria.ipynb`](https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil/blob/main/notebooks/01_diaria.ipynb).
