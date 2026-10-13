@@ -45,3 +45,17 @@ Depois é só rodar as séries (diária, mensal, anual) e os mapas.
 
 > Autor: **Ludimila de Azevedo Beltran** — ORCID
 > [0009-0003-5070-9472](https://orcid.org/0009-0003-5070-9472).
+
+## Como funciona
+
+![Fluxo do pipeline](img/fluxo.svg){fig-align="center" width="100%"}
+
+A conta no Copernicus + o `.env` (credenciais e endpoints) alimentam **três
+caminhos**: a **Statistical API** (séries), o **L2 cru** e o **Earth Engine**
+(mapas).
+
+## Um exemplo de saída
+
+![Série mensal de CH4 sobre o Brasil (2019–hoje), com média anual e tendência](img/serie_ch4_brasil.png){fig-align="center" width="100%"}
+
+A série acima foi gerada com este pipeline (dados do TROPOMI/Sentinel-5P).

@@ -32,6 +32,8 @@ plot(mensal$data, mensal$ch4_ppb, type = "o", pch = 20, col = "darkred",
 ```
 :::
 
+![Série mensal de CH4 sobre o Brasil, gerada com este pipeline](../img/serie_ch4_brasil.png){fig-align="center" width="100%"}
+
 ## Filtro de meses fracos
 
 Alguns meses têm poucos pixels válidos. É boa prática descartá-los antes de

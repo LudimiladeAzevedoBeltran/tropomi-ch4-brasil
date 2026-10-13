@@ -16,6 +16,8 @@ usados por partes diferentes do código:
 | **OAuth client** | `client_id` + `client_secret` | Statistical API (séries) | `CDSE_CLIENT_ID`, `CDSE_CLIENT_SECRET` |
 | **Login da conta** | e-mail + senha | OData (catálogo e L2 cru) | `CDSE_USERNAME`, `CDSE_PASSWORD` |
 
+![Fluxo do pipeline: conta + `.env` alimentam as séries e os mapas](../img/fluxo.svg){fig-align="center" width="100%"}
+
 ## Passo 1 — Criar a conta
 
 1. Acesse <https://dataspace.copernicus.eu> e clique em **Register** (canto superior).

@@ -10,6 +10,12 @@ gerar as credenciais, descobrir os **endpoints da API** e baixar os dados — us
 
 > Idioma: este README e o site estão em **português** e **inglês** (`docs/pt`, `docs/en`).
 
+[![Licença: MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-4a5937.svg)](LICENSE)
+[![Texto: CC BY 4.0](https://img.shields.io/badge/texto-CC%20BY%204.0-b96c4c.svg)](LICENSE-docs)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-4a5937.svg)](https://www.python.org/)
+[![R](https://img.shields.io/badge/R-4.x-4a5937.svg)](https://www.r-project.org/)
+[![Site: Quarto](https://img.shields.io/badge/site-Quarto-b96c4c.svg)](docs/)
+
 ---
 
 ## O que você consegue aqui
@@ -87,6 +93,10 @@ Se usar este material, cite:
 > do Sentinel-5P*. https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil
 
 Ver `CITATION.cff`.
+
+> O arquivo `.zenodo.json` prepara o depósito no [Zenodo](https://zenodo.org).
+> Ao conectar o repositório e criar uma *release*, o Zenodo gera um **DOI** citável
+> (aí é só descomentar a linha `doi:` no `CITATION.cff`).
 
 ## Licença
 

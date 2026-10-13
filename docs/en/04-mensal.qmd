@@ -33,6 +33,8 @@ plot(mensal$data, mensal$ch4_ppb, type = "o", pch = 20, col = "darkred",
 ```
 :::
 
+![Monthly CH4 series over Brazil, generated with this pipeline](../img/serie_ch4_brasil.png){fig-align="center" width="100%"}
+
 ## Filtering weak months
 
 ::: {.lang-python}

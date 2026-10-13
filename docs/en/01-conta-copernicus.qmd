@@ -17,6 +17,8 @@ used by different parts of the code:
 | **OAuth client** | `client_id` + `client_secret` | Statistical API (time series) | `CDSE_CLIENT_ID`, `CDSE_CLIENT_SECRET` |
 | **Account login** | e-mail + password | OData (catalog and raw L2) | `CDSE_USERNAME`, `CDSE_PASSWORD` |
 
+![Pipeline flow: account + `.env` feed the series and the maps](../img/fluxo.svg){fig-align="center" width="100%"}
+
 ## Step 1 — Create the account
 
 1. Go to <https://dataspace.copernicus.eu> and click **Register**.

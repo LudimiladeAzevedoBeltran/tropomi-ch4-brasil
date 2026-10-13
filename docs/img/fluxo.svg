@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 320" width="100%" role="img" aria-label="Fluxo do pipeline: conta Copernicus e .env alimentam a Statistical API, o L2 cru e o Earth Engine.">
+  <defs>
+    <marker id="seta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#849060"/>
+    </marker>
+    <style>
+      .box   { fill:#fbf8f2; stroke:#d8cdb6; stroke-width:1.2; rx:10; }
+      .bar-m { fill:#4a5937; }
+      .bar-t { fill:#b96c4c; }
+      .t     { font-family: Georgia, "Times New Roman", serif; font-size:17px; font-weight:600; fill:#35402b; }
+      .t-t   { fill:#9c5439; }
+      .s     { font-family: "Segoe UI", Arial, sans-serif; font-size:12.5px; fill:#6e6a59; }
+      .k     { font-family: Consolas, monospace; font-size:11px; letter-spacing:1.4px; fill:#b96c4c; text-transform:uppercase; }
+      .ln    { stroke:#849060; stroke-width:1.6; fill:none; }
+    </style>
+  </defs>
+
+  <!-- kicker -->
+  <text class="k" x="30" y="26">Fluxo do pipeline</text>
+
+  <!-- 1. conta -->
+  <rect class="box" x="30" y="120" width="196" height="82"/>
+  <rect class="bar-m" x="30" y="120" width="5" height="82" rx="2"/>
+  <text class="t" x="50" y="156">Copernicus CDSE</text>
+  <text class="s" x="50" y="178">conta + OAuth client</text>
+
+  <!-- seta 1->2 -->
+  <line class="ln" x1="228" y1="161" x2="268" y2="161" marker-end="url(#seta)"/>
+
+  <!-- 2. .env -->
+  <rect class="box" x="272" y="120" width="176" height="82"/>
+  <rect class="bar-m" x="272" y="120" width="5" height="82" rx="2"/>
+  <text class="t" x="292" y="156">.env</text>
+  <text class="s" x="292" y="178">credenciais + endpoints</text>
+
+  <!-- leque .env -> 3 -->
+  <path class="ln" d="M450,161 C520,161 520,70 596,70"  marker-end="url(#seta)"/>
+  <path class="ln" d="M450,161 L596,161"                  marker-end="url(#seta)"/>
+  <path class="ln" d="M450,161 C520,161 520,252 596,252" marker-end="url(#seta)"/>
+
+  <!-- 3a. Statistical API (serie) -->
+  <rect class="box" x="600" y="34" width="352" height="72"/>
+  <rect class="bar-m" x="600" y="34" width="5" height="72" rx="2"/>
+  <text class="t" x="620" y="64">Statistical API</text>
+  <text class="s" x="620" y="86">séries: diária · mensal · anual (P1D / P1M)</text>
+
+  <!-- 3b. L2 cru (mapas) -->
+  <rect class="box" x="600" y="125" width="352" height="72"/>
+  <rect class="bar-t" x="600" y="125" width="5" height="72" rx="2"/>
+  <text class="t t-t" x="620" y="155">OData + L2 cru</text>
+  <text class="s" x="620" y="177">mapas ~1 km (recorta e apaga o completo)</text>
+
+  <!-- 3c. GEE (mapas) -->
+  <rect class="box" x="600" y="216" width="352" height="72"/>
+  <rect class="bar-t" x="600" y="216" width="5" height="72" rx="2"/>
+  <text class="t t-t" x="620" y="246">Google Earth Engine</text>
+  <text class="s" x="620" y="268">mapas mensais (exige cota/créditos)</text>
+</svg>
