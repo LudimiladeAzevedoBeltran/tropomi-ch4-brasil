@@ -19,6 +19,9 @@ website:
     right:
       - icon: github
         href: https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil
+  page-footer:
+    left: "**TROPOMI CH4 Brasil** — Ludimila de Azevedo Beltran"
+    right: "[MIT](https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil/blob/main/LICENSE) (código) · [CC BY 4.0](https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil/blob/main/LICENSE-docs) (texto)"
 
 format:
   html:
