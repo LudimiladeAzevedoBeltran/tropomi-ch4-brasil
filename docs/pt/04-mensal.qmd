@@ -1,0 +1,38 @@
+---
+title: "4) Série mensal"
+---
+
+Média **mensal** (`P1M`) de CH4 sobre o Brasil. Diferente da diária, cabe em
+**uma única requisição** para todo o período.
+
+## Código
+
+```python
+import tropomi_ch4 as tch4
+from tropomi_ch4 import plot
+
+df = tch4.monthly(start="2019-01-01", end=None)   # None = até o mês atual
+df.to_csv("serie_mensal_ch4_brasil.csv", index=False)
+
+plot.plot_series(df, title="CH4 médio mensal no Brasil — TROPOMI",
+                 outfile="serie_mensal_ch4_brasil.png")
+```
+
+## Filtro de meses fracos
+
+Alguns meses têm poucos pixels válidos. É boa prática descartá-los antes de
+analisar:
+
+```python
+df_bom = df[df["n_validos"] > 200]
+```
+
+## Diária vs. mensal
+
+| | Diária | Mensal |
+|---|---|---|
+| Granularidade | `P1D` | `P1M` |
+| Requisições | 1 por ano | 1 no total |
+| Uso típico | sazonalidade fina, eventos | tendência, séries longas |
+
+Notebook pronto: [`notebooks/02_mensal.ipynb`](https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil/blob/main/notebooks/02_mensal.ipynb).

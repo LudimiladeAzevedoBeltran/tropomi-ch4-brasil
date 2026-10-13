@@ -1,0 +1,64 @@
+---
+title: "1) Conta no Copernicus"
+---
+
+Os dados do **Sentinel-5P/TROPOMI** vêm do **Copernicus Data Space Ecosystem (CDSE)**.
+O acesso é gratuito, mas exige uma conta.
+
+## 1.1 Criar a conta
+
+1. Acesse <https://dataspace.copernicus.eu> e clique em **Register**.
+2. Preencha os dados e **confirme o e-mail de ativação**.
+
+::: {.callout-warning}
+Sem confirmar o e-mail, o login não completa — é a causa mais comum de erro `401`/`403`.
+:::
+
+## 1.2 Criar o OAuth client (para as séries)
+
+A **Statistical API** (usada nas séries diária e mensal) autentica com um
+**OAuth client**:
+
+1. Abra <https://shapps.dataspace.copernicus.eu/dashboard/#/account/settings>.
+2. Em **User settings → OAuth clients**, clique em **Create**.
+3. Escolha **"Never expire"** (evita precisar renovar) e confirme.
+4. Copie o **client_id** e o **client_secret**.
+
+::: {.callout-important}
+O **client_secret** aparece **uma única vez**. Guarde-o com cuidado. Se perder,
+exclua o client e crie outro.
+:::
+
+Coloque os valores no seu `.env`:
+
+```bash
+CDSE_CLIENT_ID=seu-client-id
+CDSE_CLIENT_SECRET=seu-client-secret
+```
+
+## 1.3 Login da conta (para o L2 cru)
+
+O download do **L2 cru** (mapas ~1 km) usa o **login normal da conta**
+(e-mail e senha), e **não** o OAuth client:
+
+```bash
+CDSE_USERNAME=seu-email@exemplo.com
+CDSE_PASSWORD=sua-senha
+```
+
+## 1.4 Google Earth Engine (opcional)
+
+Para os mapas via GEE (seção 7), você precisa de uma conta Google com Earth Engine:
+
+1. Acesse <https://code.earthengine.google.com/> e faça login.
+2. Aceite os termos e registre um **Cloud Project**.
+3. Anote o **Project ID** (ex.: `meu-projeto-123456`) e coloque no `.env`
+   como `GEE_PROJECT`.
+
+## Resumo das credenciais
+
+| Uso | Variável no `.env` | Onde conseguir |
+|---|---|---|
+| Séries (Statistical API) | `CDSE_CLIENT_ID`, `CDSE_CLIENT_SECRET` | OAuth clients no dashboard |
+| L2 cru (mapas ~1 km) | `CDSE_USERNAME`, `CDSE_PASSWORD` | login da conta |
+| Google Earth Engine | `GEE_PROJECT` | Cloud Project no GEE |

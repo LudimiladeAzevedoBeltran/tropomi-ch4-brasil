@@ -1,0 +1,72 @@
+---
+title: "2) Links da API"
+---
+
+Antes de programar, você precisa dos **endpoints** (endereços) da API do CDSE.
+Eles ficam nas configurações do `.env` (veja `.env.example`).
+
+## 2.1 Os quatro endpoints
+
+| Nome | Para que serve |
+|---|---|
+| `CDSE_TOKEN_URL` | Obter o *token* de acesso (autenticação) |
+| `CDSE_STATS_URL` | **Statistical API** (estatísticas agregadas, séries) |
+| `CDSE_CATALOG_URL` | Catálogo OData (listar *granules* do L2) |
+| `CDSE_DOWNLOAD_URL` | Download dos produtos (L2 cru) |
+
+Valores padrão:
+
+```bash
+CDSE_TOKEN_URL=https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token
+CDSE_STATS_URL=https://sh.dataspace.copernicus.eu/api/v1/statistics
+CDSE_CATALOG_URL=https://catalogue.dataspace.copernicus.eu/odata/v1/Products
+CDSE_DOWNLOAD_URL=https://download.dataspace.copernicus.eu/odata/v1/Products
+```
+
+## 2.2 Como descobrir / conferir
+
+- **Documentação oficial:**
+  - Sentinel Hub (Statistical API): <https://docs.sentinel-hub.com/api/latest/api/statistical/>
+  - CDSE OData (catálogo/download): <https://documentation.dataspace.copernicus.eu/APIs/OData.html>
+- Se o provedor mudar um endereço, **atualize o `.env`** — o código lê de lá,
+  não do código-fonte.
+
+## 2.3 Testar a autenticação
+
+Com as credenciais no `.env`, teste o *token*:
+
+```python
+from tropomi_ch4.config import get_credentials, endpoints
+import requests
+
+creds = get_credentials()
+url = endpoints()["token"]
+r = requests.post(url, data={
+    "grant_type": "client_credentials",
+    "client_id": creds.client_id,
+    "client_secret": creds.client_secret,
+}, timeout=60)
+print(r.status_code)
+print(r.json().get("access_token", "")[:20], "...")
+```
+
+Se retornar `200` e um token, está tudo certo. `401` costuma ser credencial
+errada; `400` normalmente é `grant_type` incorreto.
+
+## 2.4 Autenticação por senha (L2 cru)
+
+O download do L2 usa outro `grant_type` (`password`), com o e-mail/senha da conta:
+
+```python
+from tropomi_ch4.config import get_login, endpoints
+import requests
+
+creds = get_login()
+r = requests.post(endpoints()["token"], data={
+    "grant_type": "password",
+    "client_id": "cdse-public",
+    "username": creds.username,
+    "password": creds.password,
+}, timeout=60)
+print(r.status_code)
+```

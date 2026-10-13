@@ -1,0 +1,43 @@
+---
+title: "3) Série diária"
+---
+
+Média **diária** (`P1D`, a menor granularidade da API) de CH4 sobre o Brasil.
+A Statistical API agrega no servidor: você recebe a série pronta, sem baixar
+imagens.
+
+::: {.callout-note}
+Nem todo dia tem observação. A cobertura aumenta ao longo dos anos
+(começa mais baixa em 2019 e se aproxima de 100% nos anos recentes).
+:::
+
+## Código
+
+```python
+import tropomi_ch4 as tch4
+from tropomi_ch4 import plot
+
+# Uma requisição por ano (mais robusto a falhas)
+df = tch4.daily(start="2019-01-01", end=None)   # None = até hoje
+df.to_csv("serie_diaria_ch4_brasil.csv", index=False)
+
+plot.plot_series(df, title="CH4 médio diário no Brasil — TROPOMI",
+                 outfile="serie_diaria_ch4_brasil.png")
+```
+
+O `DataFrame` tem as colunas:
+
+| Coluna | Significado |
+|---|---|
+| `data` | data da observação |
+| `ch4_ppb` | média de CH4 (ppb) sobre o Brasil |
+| `n_validos` | nº de pixels válidos no período |
+| `ano`, `mes` | auxiliares |
+
+## O que acontece por baixo
+
+`tch4.daily` chama `statistical_series("P1D", ...)`, que envia um corpo JSON
+com a caixa do Brasil, o período e um **evalscript** que lê a banda `CH4`
+(com filtro de qualidade) e faz a média.
+
+Notebook pronto: [`notebooks/01_diaria.ipynb`](https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil/blob/main/notebooks/01_diaria.ipynb).

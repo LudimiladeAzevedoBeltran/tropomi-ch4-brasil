@@ -1,0 +1,49 @@
+---
+title: "2) API links"
+lang: en
+---
+
+Before coding, you need the CDSE **endpoints**. They live in `.env`
+(see `.env.example`).
+
+## 2.1 The four endpoints
+
+| Name | Purpose |
+|---|---|
+| `CDSE_TOKEN_URL` | Get the access token (authentication) |
+| `CDSE_STATS_URL` | **Statistical API** (aggregated statistics, time series) |
+| `CDSE_CATALOG_URL` | OData catalog (list L2 granules) |
+| `CDSE_DOWNLOAD_URL` | Download products (raw L2) |
+
+Defaults:
+
+```bash
+CDSE_TOKEN_URL=https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token
+CDSE_STATS_URL=https://sh.dataspace.copernicus.eu/api/v1/statistics
+CDSE_CATALOG_URL=https://catalogue.dataspace.copernicus.eu/odata/v1/Products
+CDSE_DOWNLOAD_URL=https://download.dataspace.copernicus.eu/odata/v1/Products
+```
+
+## 2.2 How to find / verify
+
+- **Official docs:**
+  - Sentinel Hub (Statistical API): <https://docs.sentinel-hub.com/api/latest/api/statistical/>
+  - CDSE OData: <https://documentation.dataspace.copernicus.eu/APIs/OData.html>
+- If a provider changes an address, **update `.env`** — the code reads from there.
+
+## 2.3 Test authentication
+
+```python
+from tropomi_ch4.config import get_credentials, endpoints
+import requests
+
+creds = get_credentials()
+r = requests.post(endpoints()["token"], data={
+    "grant_type": "client_credentials",
+    "client_id": creds.client_id,
+    "client_secret": creds.client_secret,
+}, timeout=60)
+print(r.status_code)
+```
+
+`200` means success. `401` usually means wrong credentials.

@@ -1,0 +1,42 @@
+---
+title: "5) Série anual"
+---
+
+A escala **anual** resume a série em um valor por ano — útil para tendência.
+Aqui ela é **derivada da mensal** (média dos meses válidos de cada ano).
+
+## Código
+
+```python
+import tropomi_ch4 as tch4
+from tropomi_ch4 import plot
+
+df = tch4.annual(start="2019-01-01", end=None)
+df.to_csv("serie_anual_ch4_brasil.csv", index=False)
+
+plot.plot_series(df, title="CH4 médio anual no Brasil — TROPOMI",
+                 outfile="serie_anual_ch4_brasil.png")
+```
+
+`tch4.annual` internamente chama a série mensal e agrupa por ano:
+
+$$
+\overline{CH4}_{ano} = \frac{1}{n}\sum_{m \in \text{meses válidos}} CH4_{m}
+$$
+
+## E o `P1Y` da API?
+
+A Statistical API aceita periodicidade ISO 8601. `P1D` e `P1M` funcionam de
+forma estável; a granularidade **`P1Y` (anual) precisa ser verificada** no seu
+caso de uso. [requer verificação]
+
+Por isso, o caminho recomendado é derivar o anual do mensal:
+
+- menos requisições e menos dependência de comportamento da API;
+- você controla como tratar meses faltantes;
+- a média anual fica reprodutível a partir da série mensal.
+
+Se o `P1Y` funcionar no seu teste, use-o; a função `annual` pode ser trocada por
+uma chamada direta a `statistical_series("P1Y", ...)`.
+
+Notebook pronto: [`notebooks/03_anual.ipynb`](https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil/blob/main/notebooks/03_anual.ipynb).

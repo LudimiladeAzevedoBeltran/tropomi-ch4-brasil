@@ -1,0 +1,39 @@
+---
+title: "Tutorial — Português"
+---
+
+Este tutorial ensina, do zero, a obter e analisar o **metano (CH4)** do
+**Sentinel-5P/TROPOMI** sobre o **Brasil**. Siga na ordem:
+
+1. [Conta Copernicus](01-conta-copernicus.qmd) — criar conta e credenciais
+2. [Links da API](02-links-api.qmd) — descobrir os endpoints
+3. [Série diária](03-diaria.qmd) — `P1D`
+4. [Série mensal](04-mensal.qmd) — `P1M`
+5. [Série anual](05-anual.qmd) — derivada do mensal
+6. [Mapas com L2 cru](06-mapas-l2.qmd) — GeoTIFF ~1 km
+7. [Mapas com Google Earth Engine](07-mapas-gee.qmd)
+8. [Segurança](08-seguranca.qmd) — proteger as credenciais
+9. [Citação e licença](09-citacao.qmd)
+
+## Antes de começar
+
+Você vai precisar de:
+
+- Python 3.10 ou superior;
+- uma conta gratuita no [Copernicus Data Space](https://dataspace.copernicus.eu);
+- (opcional, para mapas via GEE) uma conta Google com acesso ao
+  [Earth Engine](https://earthengine.google.com).
+
+Instale as dependências do projeto:
+
+```bash
+pip install -r requirements.txt
+```
+
+E crie o arquivo de credenciais a partir do modelo:
+
+```bash
+cp .env.example .env
+```
+
+> O arquivo `.env` guarda suas credenciais e **nunca** deve ir para o GitHub.

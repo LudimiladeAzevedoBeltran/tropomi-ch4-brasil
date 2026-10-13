@@ -1,0 +1,20 @@
+# Nucleo
+requests>=2.31
+python-dotenv>=1.0
+pandas>=2.0
+numpy>=1.26
+matplotlib>=3.7
+
+# L2 cru (streaming + GeoTIFF)
+h5py>=3.10
+rasterio>=1.3
+
+# Mapas / processamento local
+xarray>=2023.1
+rioxarray>=0.15
+scipy>=1.10
+
+# Google Earth Engine (opcional)
+earthengine-api>=1.5
+geemap>=0.35
+gdown>=5.0

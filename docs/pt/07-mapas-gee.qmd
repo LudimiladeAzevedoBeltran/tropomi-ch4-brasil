@@ -1,0 +1,57 @@
+---
+title: "7) Mapas com o Google Earth Engine"
+---
+
+Alternativa ao L2 cru: usar o produto **L3** já gradeado
+(`COPERNICUS/S5P/OFFL/L3_CH4`) no **Google Earth Engine (GEE)**, exportando por
+**tarefas em lote** (evita `Computation timed out` / `user memory limit`).
+
+## Pré-requisitos
+
+```bash
+pip install -e ".[gee]"
+```
+
+Configure `GEE_PROJECT` no `.env` e autentique **uma vez**:
+
+```python
+import ee
+ee.Authenticate()                 # abre o navegador (só na 1ª vez)
+ee.Initialize(project="seu-projeto")
+```
+
+::: {.callout-note}
+Uso gratuito do Earth Engine é permitido para pesquisa e ensino (não comercial).
+:::
+
+## Exportar a série e os rasters
+
+```python
+import ee, geemap
+
+COLLECTION = "COPERNICUS/S5P/OFFL/L3_CH4"
+BAND = "CH4_column_volume_mixing_ratio_dry_air_bias_corrected"
+DRIVE_FOLDER = "CH4_TROPOMI_Brasil"
+
+brasil = (ee.FeatureCollection("FAO/GAUL/2015/level0")
+          .filter(ee.Filter.eq("ADM0_NAME", "Brazil")).geometry())
+
+# Exemplo: um mês -> GeoTIFF no Drive
+ini = ee.Date.fromYMD(2022, 1, 1)
+img = (ee.ImageCollection(COLLECTION)
+       .filterDate(ini, ini.advance(1, "month"))
+       .select(BAND).mean().clip(brasil).toFloat())
+
+geemap.ee_export_image_to_drive(
+    image=img, description="CH4_2022_01", folder=DRIVE_FOLDER,
+    fileNamePrefix="CH4_2022_01", region=brasil.bounds(),
+    scale=1113.2, crs="EPSG:4326", fileFormat="GeoTIFF")
+```
+
+Acompanhe as tarefas em <https://code.earthengine.google.com/tasks>. Depois,
+baixe os `.tif` do Drive (manualmente ou com `gdown`) para uma pasta local.
+
+::: {.callout-tip}
+Antes de exportar 2019→hoje (~90 meses), teste com um único mês para confirmar
+que os arquivos aparecem no Drive.
+:::

@@ -1,0 +1,32 @@
+---
+title: "TROPOMI CH4 Brasil"
+---
+
+::: {.hero}
+Tutorial e código aberto para obter e analisar a concentração de **metano (CH4)** do
+satélite **Sentinel-5P (TROPOMI)** sobre o **Brasil**, em escalas **diária**, **mensal**
+e **anual**, além de mapas em ~1 km.
+:::
+
+## Escolha o idioma / Choose your language
+
+::: {.card-grid}
+[**Português** — comece por aqui](pt/index.qmd)
+
+[**English** — start here](en/index.qmd)
+:::
+
+## O que você vai encontrar
+
+<span class="badge-scale">Diária</span>
+<span class="badge-scale">Mensal</span>
+<span class="badge-scale">Anual</span>
+<span class="badge-scale">Mapas ~1 km</span>
+
+- Como criar a conta no **Copernicus Data Space** e gerar as credenciais.
+- Como descobrir os **links (endpoints) da API**.
+- Séries temporais com a **Statistical API** (`P1D` e `P1M`).
+- Mapas mensais com o **L2 cru** e com o **Google Earth Engine**.
+
+> Autor: **Ludimila de Azevedo Beltran** — ORCID
+> [0009-0003-5070-9472](https://orcid.org/0009-0003-5070-9472).

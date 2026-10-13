@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "Se você usar este material, por favor cite como abaixo."
+title: "TROPOMI CH4 Brasil: tutorial e código para séries de metano do Sentinel-5P"
+abstract: >-
+  Tutorial e código aberto para obter e analisar a concentração de metano (CH4)
+  do satélite Sentinel-5P (TROPOMI) sobre o Brasil, em escalas diária, mensal e
+  anual, incluindo mapas em ~1 km.
+authors:
+  - family-names: Beltran
+    given-names: Ludimila de Azevedo
+    orcid: "https://orcid.org/0009-0003-5070-9472"
+type: software
+version: 0.1.0
+date-released: 2026-10-13
+license: MIT
+repository-code: "https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil"
+keywords:
+  - TROPOMI
+  - Sentinel-5P
+  - metano
+  - CH4
+  - Copernicus
+  - sensoriamento remoto
+  - Brasil

@@ -1,0 +1,46 @@
+---
+title: "8) Segurança das credenciais"
+---
+
+Suas credenciais dão acesso à sua conta. Trate-as como senha.
+
+## Regras de ouro
+
+1. **Nunca** coloque credenciais no código nem nos notebooks.
+2. Guarde tudo no arquivo `.env`.
+3. O `.env` já está no `.gitignore` — confirme antes de subir o repositório.
+4. Combine sempre: código público, **segredo fora do Git**.
+
+## `.env`
+
+```bash
+# .env  (NÃO versionar)
+CDSE_CLIENT_ID=...
+CDSE_CLIENT_SECRET=...
+CDSE_USERNAME=...
+CDSE_PASSWORD=...
+```
+
+O pacote lê esses valores com `python-dotenv` (ver `tropomi_ch4/config.py`).
+
+## Antes de cada `git push`
+
+```bash
+git status
+```
+
+Se o `.env` aparecer na lista, **pare** e corrija o `.gitignore`.
+
+## Se um segredo vazar
+
+Vale para *tokens*, *client secrets* e senhas:
+
+1. **Revogue** o OAuth client no dashboard do CDSE e crie outro.
+2. **Troque a senha** da conta, se ela foi exposta.
+3. Lembre-se: apagar o commit **não basta** — o segredo pode continuar no
+   histórico do Git. Revogar é o que resolve.
+
+::: {.callout-warning}
+Um `client_secret` aparece **uma única vez** ao ser criado. Se você o perdeu ou
+exposou, exclua o client e gere um novo.
+:::

@@ -1,0 +1,34 @@
+/* Ajustes visuais do site */
+
+.hero {
+  padding: 2rem 0 1rem;
+}
+
+.badge-scale {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: #eef3f8;
+  color: #21527a;
+  font-size: 0.85rem;
+  margin-right: 0.35rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.card-grid a {
+  display: block;
+  padding: 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.card-grid a:hover {
+  border-color: #21527a;
+}

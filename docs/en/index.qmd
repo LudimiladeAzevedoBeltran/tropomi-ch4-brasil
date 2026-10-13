@@ -1,0 +1,28 @@
+---
+title: "Tutorial — English"
+lang: en
+---
+
+This tutorial explains, from scratch, how to download and analyze **methane
+(CH4)** from **Sentinel-5P/TROPOMI** over **Brazil**.
+
+::: {.callout-note}
+The English translation is **in progress**. The full tutorial is available in
+[Português](../pt/index.qmd). Pages translated so far are linked below.
+:::
+
+1. [Copernicus account](01-conta-copernicus.qmd)
+2. [API links](02-links-api.qmd)
+
+## Requirements
+
+- Python 3.10 or newer;
+- a free [Copernicus Data Space](https://dataspace.copernicus.eu) account;
+- (optional, for GEE maps) a Google account with Earth Engine access.
+
+```bash
+pip install -r requirements.txt
+cp .env.example .env
+```
+
+> The `.env` file stores your credentials and must **never** be committed.

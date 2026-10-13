@@ -1,0 +1,55 @@
+---
+title: "6) Mapas com o L2 cru"
+---
+
+Para **mapas** mensais em ~1 km, as séries da API não bastam: é preciso o
+produto **L2 cru** (`L2__CH4___`). O fluxo baixa os *granules* **um a um**,
+recorta à caixa do Brasil, acumula a média mensal e **apaga o arquivo grande** —
+o disco usado permanece pequeno.
+
+::: {.callout-warning}
+**Custo real é banda/tempo**, não disco: cerca de **~6 GB por mês** de download
+e ~20–25 min de processamento por mês. Comece com um mês de teste.
+:::
+
+## Pré-requisitos
+
+Além das dependências-base, instale as opcionais:
+
+```bash
+pip install -e ".[l2]"
+```
+
+E configure o login da conta no `.env` (`CDSE_USERNAME`, `CDSE_PASSWORD`) —
+veja [Conta Copernicus](01-conta-copernicus.qmd).
+
+## Código
+
+```python
+from tropomi_ch4 import l2
+
+# Um mês de teste (nº máx. de granules pequeno)
+media = l2.build_monthly_geotiff(
+    year=2022, month=1,
+    out_tif="l2_mensal/CH4_2022_01.tif",
+    res=0.01,          # ~1 km
+    max_granules=5,    # remova/None para o mês todo
+)
+print("CH4 médio (ppb):", media)
+```
+
+Para processar vários meses, repita a chamada num laço. O GeoTIFF sai em
+`EPSG:4326`, com `nodata=NaN` e compressão *deflate*.
+
+## Como o L2 é montado
+
+1. `list_granules` consulta o catálogo OData do mês.
+2. `download` baixa cada granule (streaming).
+3. `accumulate_granule` lê `methane_mixing_ratio_bias_corrected` e `qa_value`,
+   filtra por qualidade e soma nas grades de CH4 e de contagem.
+4. A média mensal vira o GeoTIFF.
+
+::: {.callout-note}
+A Statistical API (séries) não entrega bons **mapas** para o S5P: a cobertura
+espacial fica irregular. Para mapas, use o L2 cru (esta página) ou o GEE (próxima).
+:::

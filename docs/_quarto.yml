@@ -1,0 +1,32 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "TROPOMI CH4 Brasil"
+  description: "Séries e mapas de metano (CH4) do Sentinel-5P/TROPOMI para o Brasil."
+  site-url: https://ludimiladeazevedobeltran.github.io/tropomi-ch4-brasil/
+  repo-url: https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil
+  repo-actions: [edit, issue]
+  navbar:
+    left:
+      - text: Início
+        href: index.qmd
+      - text: Português
+        href: pt/index.qmd
+      - text: English
+        href: en/index.qmd
+    right:
+      - icon: github
+        href: https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    code-copy: true
+    code-overflow: wrap
+    lang: pt
+    css: styles.css
+    link-external-newwindow: true
