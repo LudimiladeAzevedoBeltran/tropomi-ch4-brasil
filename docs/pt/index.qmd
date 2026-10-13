@@ -3,10 +3,18 @@ title: "Tutorial — Português"
 ---
 
 Este tutorial ensina, do zero, a obter e analisar o **metano (CH4)** do
-**Sentinel-5P/TROPOMI** sobre o **Brasil**. Siga na ordem:
+**Sentinel-5P/TROPOMI** sobre o **Brasil**.
+
+::: {.callout-important}
+## Comece por aqui (o coração do repositório)
+Os passos **1 e 2** são os mais importantes: ensinam a **obter suas credenciais** e os
+**links da API** que você preenche no `.env`.
+:::
+
+Siga na ordem:
 
 1. [Conta Copernicus](01-conta-copernicus.qmd) — criar conta e credenciais
-2. [Links da API](02-links-api.qmd) — descobrir os endpoints
+2. [Links da API](02-links-api.qmd) — os endpoints e como confirmá-los
 3. [Série diária](03-diaria.qmd) — `P1D`
 4. [Série mensal](04-mensal.qmd) — `P1M`
 5. [Série anual](05-anual.qmd) — derivada do mensal

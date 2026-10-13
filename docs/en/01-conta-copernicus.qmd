@@ -1,33 +1,47 @@
 ---
-title: "1) Copernicus account"
+title: "1) Copernicus account and credentials"
 lang: en
 ---
 
-Sentinel-5P/TROPOMI data comes from the **Copernicus Data Space Ecosystem
-(CDSE)**. Access is free, but requires an account.
-
-## 1.1 Create the account
-
-1. Go to <https://dataspace.copernicus.eu> and click **Register**.
-2. Fill in your details and **confirm the activation e-mail**.
-
-::: {.callout-warning}
-Without confirming the e-mail, the login will not complete — the most common
-cause of `401`/`403` errors.
+::: {.callout-note}
+## Start here
+This page is the **heart of the repository**: it is where you get the credentials that
+go into `.env`. Follow the steps in order and fill in each field.
 :::
 
-## 1.2 Create the OAuth client (for time series)
+The **Copernicus Data Space Ecosystem (CDSE)** offers **two kinds of authentication**,
+used by different parts of the code:
 
-The **Statistical API** authenticates with an **OAuth client**:
+| Type | What it is | Used for | Variables in `.env` |
+|---|---|---|---|
+| **OAuth client** | `client_id` + `client_secret` | Statistical API (time series) | `CDSE_CLIENT_ID`, `CDSE_CLIENT_SECRET` |
+| **Account login** | e-mail + password | OData (catalog and raw L2) | `CDSE_USERNAME`, `CDSE_PASSWORD` |
 
-1. Open <https://shapps.dataspace.copernicus.eu/dashboard/#/account/settings>.
-2. Under **User settings → OAuth clients**, click **Create**.
-3. Choose **"Never expire"** and confirm.
-4. Copy the **client_id** and **client_secret**.
+## Step 1 — Create the account
+
+1. Go to <https://dataspace.copernicus.eu> and click **Register**.
+2. Fill in e-mail, password and details. **Confirm the activation e-mail** (check spam).
+3. Log in at <https://dataspace.copernicus.eu>.
+
+::: {.callout-warning}
+Without confirming the e-mail, login will not complete — the most common cause of
+`401`/`403` errors later.
+:::
+
+## Step 2 — Create the OAuth client (for time series)
+
+1. Open the settings dashboard:
+   <https://shapps.dataspace.copernicus.eu/dashboard/#/account/settings>
+   (log in with the same account).
+2. In the side menu, go to **User settings → OAuth clients**.
+3. Click **Create**.
+4. Give it a name (e.g. `tropomi-ch4`) and choose the expiry. Recommended:
+   **Never expire**.
+5. Click **Create** again. The panel shows the **client_id** and **client_secret**.
 
 ::: {.callout-important}
-The **client_secret** is shown **only once**. If you lose it, delete the client
-and create a new one.
+The **client_secret is shown only once**. Copy and store it now. If you lose it,
+delete the client and create a new one.
 :::
 
 ```bash
@@ -35,18 +49,48 @@ CDSE_CLIENT_ID=your-client-id
 CDSE_CLIENT_SECRET=your-client-secret
 ```
 
-## 1.3 Account login (for raw L2)
+## Step 3 — Account login (for raw L2)
 
-Downloading the **raw L2** (1 km maps) uses the normal **account login**
-(e-mail and password), not the OAuth client:
+Downloading the **raw L2** (1 km maps) uses the **normal login**, not the OAuth client.
+Use the **same e-mail and password** as the account:
 
 ```bash
 CDSE_USERNAME=you@example.com
 CDSE_PASSWORD=your-password
 ```
 
-## 1.4 Google Earth Engine (optional)
+Under the hood, the code authenticates with `grant_type=password` and
+`client_id=cdse-public` (the CDSE public client, not yours).
 
-1. Go to <https://code.earthengine.google.com/> and sign in.
-2. Accept the terms and register a **Cloud Project**.
-3. Copy the **Project ID** into `GEE_PROJECT` in your `.env`.
+## Step 4 — Google Earth Engine (optional)
+
+Only needed for GEE maps (page 7):
+
+1. Go to <https://code.earthengine.google.com/> and sign in with Google.
+2. Accept the terms and **register a Cloud Project**.
+3. Copy the **Project ID**.
+
+```bash
+GEE_PROJECT=your-project-id
+GEE_DRIVE_FOLDER=CH4_TROPOMI_Brasil
+```
+
+## Summary: where to get each variable
+
+| Variable in `.env` | What it is | Where to get it |
+|---|---|---|
+| `CDSE_CLIENT_ID` | OAuth client ID | Dashboard → *User settings → OAuth clients* |
+| `CDSE_CLIENT_SECRET` | OAuth client secret | same (shown **once**) |
+| `CDSE_USERNAME` | Account e-mail | the one you registered at CDSE |
+| `CDSE_PASSWORD` | Account password | the one you registered at CDSE |
+| `GEE_PROJECT` | Earth Engine project ID | <https://code.earthengine.google.com/> |
+| `CDSE_*_URL` | API endpoints | page [API links](02-links-api.qmd) |
+
+## Common issues
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| `401` at login | e-mail not confirmed | confirm the e-mail and retry |
+| `401`/`403` on series | wrong `client_id`/`secret` | re-copy or recreate the OAuth client |
+| `client_secret` lost | shown only once | delete the client and create a new one |
+| `404` on L2 | wrong product ID/endpoint | check the [API links](02-links-api.qmd) page |

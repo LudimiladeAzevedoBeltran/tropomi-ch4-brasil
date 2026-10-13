@@ -3,11 +3,19 @@ title: "Tutorial — English"
 lang: en
 ---
 
-This tutorial explains, from scratch, how to download and analyze **methane
-(CH4)** from **Sentinel-5P/TROPOMI** over **Brazil**. Follow in order:
+This tutorial explains, from scratch, how to download and analyze **methane (CH4)**
+from **Sentinel-5P/TROPOMI** over **Brazil**.
+
+::: {.callout-important}
+## Start here (the heart of the repository)
+Steps **1 and 2** are the most important: they teach how to **get your credentials**
+and the **API links** you fill into `.env`.
+:::
+
+Follow in order:
 
 1. [Copernicus account](01-conta-copernicus.qmd) — create account and credentials
-2. [API links](02-links-api.qmd) — find the endpoints
+2. [API links](02-links-api.qmd) — the endpoints and how to confirm them
 3. [Daily series](03-diaria.qmd) — `P1D`
 4. [Monthly series](04-mensal.qmd) — `P1M`
 5. [Annual series](05-anual.qmd) — derived from monthly

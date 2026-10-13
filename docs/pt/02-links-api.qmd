@@ -1,72 +1,86 @@
 ---
-title: "2) Links da API"
+title: "2) Links da API (endpoints)"
 ---
 
-Antes de programar, você precisa dos **endpoints** (endereços) da API do CDSE.
-Eles ficam nas configurações do `.env` (veja `.env.example`).
+::: {.callout-note}
+## Comece por aqui
+Segunda parte do **coração do repositório**: aqui estão os **links (endpoints) da API**
+que você vai colar no `.env`. O código traz `INSIRA_AQUI` — você substitui pelos valores
+abaixo.
+:::
 
-## 2.1 Os quatro endpoints
+O arquivo `.env` tem **quatro** endpoints. Cada um serve a uma etapa diferente:
 
-| Nome | Para que serve |
-|---|---|
-| `CDSE_TOKEN_URL` | Obter o *token* de acesso (autenticação) |
-| `CDSE_STATS_URL` | **Statistical API** (estatísticas agregadas, séries) |
-| `CDSE_CATALOG_URL` | Catálogo OData (listar *granules* do L2) |
-| `CDSE_DOWNLOAD_URL` | Download dos produtos (L2 cru) |
+| Variável no `.env` | Endpoint oficial | Para que serve |
+|---|---|---|
+| `CDSE_TOKEN_URL` | `https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token` | obter o *token* de acesso |
+| `CDSE_STATS_URL` | `https://sh.dataspace.copernicus.eu/api/v1/statistics` | **Statistical API** (séries) |
+| `CDSE_CATALOG_URL` | `https://catalogue.dataspace.copernicus.eu/odata/v1/Products` | catálogo OData (listar granules) |
+| `CDSE_DOWNLOAD_URL` | `https://download.dataspace.copernicus.eu/odata/v1/Products` | download dos produtos (L2) |
 
-Preencha no `.env` (encontre os links válidos na documentação oficial — ver abaixo):
+## Copie para o `.env`
 
 ```bash
-CDSE_TOKEN_URL=INSIRA_AQUI
-CDSE_STATS_URL=INSIRA_AQUI
-CDSE_CATALOG_URL=INSIRA_AQUI
-CDSE_DOWNLOAD_URL=INSIRA_AQUI
+CDSE_TOKEN_URL=https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token
+CDSE_STATS_URL=https://sh.dataspace.copernicus.eu/api/v1/statistics
+CDSE_CATALOG_URL=https://catalogue.dataspace.copernicus.eu/odata/v1/Products
+CDSE_DOWNLOAD_URL=https://download.dataspace.copernicus.eu/odata/v1/Products
 ```
 
-## 2.2 Como descobrir / conferir
+::: {.callout-tip}
+Estes são endereços **públicos** de API (não são segredo). Eles não vêm preenchidos no
+código (`INSIRA_AQUI`) para você declarar a sua configuração no `.env`.
+:::
 
-- **Documentação oficial:**
-  - Sentinel Hub (Statistical API): <https://docs.sentinel-hub.com/api/latest/api/statistical/>
-  - CDSE OData (catálogo/download): <https://documentation.dataspace.copernicus.eu/APIs/OData.html>
-- Se o provedor mudar um endereço, **atualize o `.env`** — o código lê de lá,
-  não do código-fonte.
+## Onde confirmar (documentação oficial)
 
-## 2.3 Testar a autenticação
+Se um link mudar, consulte a documentação e atualize o `.env`:
 
-Com as credenciais no `.env`, teste o *token*:
+- **Documentação do CDSE:** <https://documentation.dataspace.copernicus.eu>
+  - OData (catálogo e download): <https://documentation.dataspace.copernicus.eu/APIs/OData.html>
+  - Sentinel Hub (Statistical API): <https://documentation.dataspace.copernicus.eu/APIs/SentinelHub.html>
+- **Sentinel Hub — Statistical API:** <https://docs.sentinel-hub.com/api/latest/api/statistical/>
+  (estas páginas estão migrando para `docs.planet.com`; use as do CDSE como referência principal).
+
+## Como testar cada peça
+
+### 1) Token (OAuth client)
 
 ```python
 from tropomi_ch4.config import get_credentials, endpoints
 import requests
 
 creds = get_credentials()
-url = endpoints()["token"]
-r = requests.post(url, data={
+r = requests.post(endpoints()["token"], data={
     "grant_type": "client_credentials",
     "client_id": creds.client_id,
     "client_secret": creds.client_secret,
 }, timeout=60)
-print(r.status_code)
+print(r.status_code)                 # 200 = ok
 print(r.json().get("access_token", "")[:20], "...")
 ```
 
-Se retornar `200` e um token, está tudo certo. `401` costuma ser credencial
-errada; `400` normalmente é `grant_type` incorreto.
-
-## 2.4 Autenticação por senha (L2 cru)
-
-O download do L2 usa outro `grant_type` (`password`), com o e-mail/senha da conta:
+### 2) Statistical API (séries)
 
 ```python
-from tropomi_ch4.config import get_login, endpoints
-import requests
-
-creds = get_login()
-r = requests.post(endpoints()["token"], data={
-    "grant_type": "password",
-    "client_id": "cdse-public",
-    "username": creds.username,
-    "password": creds.password,
-}, timeout=60)
-print(r.status_code)
+import tropomi_ch4 as tch4
+df = tch4.monthly(start="2022-01-01", end="2022-03-01")
+print(df.head())
 ```
+
+### 3) Catálogo OData (L2)
+
+```python
+from tropomi_ch4 import l2
+print(len(l2.list_granules(2022, 1)), "granules em 2022-01")
+```
+
+### 4) Download OData
+
+Coberto por `l2.build_monthly_geotiff(...)` (baixa, recorta e apaga o arquivo
+completo — ver [Mapas com L2 cru](06-mapas-l2.qmd)).
+
+::: {.callout-note}
+Se `endpoints()` reclamar de "Endpoints nao definidos", é porque o `.env` ainda
+tem `INSIRA_AQUI`. Preencha os quatro valores acima.
+:::

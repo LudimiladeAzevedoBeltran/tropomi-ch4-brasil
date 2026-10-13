@@ -16,6 +16,18 @@ e **anual**, além de mapas em ~1 km.
 [**English** — start here](en/index.qmd)
 :::
 
+## Comece por aqui / Start here
+
+O **coração do repositório** é o passo a passo para **obter suas credenciais e os links
+da API** (é o que você cola no `.env`):
+
+1. [Conta no Copernicus e credenciais](pt/01-conta-copernicus.qmd) — criar conta,
+   OAuth client e o login da conta.
+2. [Links da API (endpoints)](pt/02-links-api.qmd) — os quatro endpoints e como
+   confirmá-los.
+
+Depois é só rodar as séries (diária, mensal, anual) e os mapas.
+
 ## O que você vai encontrar
 
 <span class="badge-scale">Diária</span>

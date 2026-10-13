@@ -1,64 +1,104 @@
 ---
-title: "1) Conta no Copernicus"
+title: "1) Conta no Copernicus e credenciais"
 ---
 
-Os dados do **Sentinel-5P/TROPOMI** vêm do **Copernicus Data Space Ecosystem (CDSE)**.
-O acesso é gratuito, mas exige uma conta.
-
-## 1.1 Criar a conta
-
-1. Acesse <https://dataspace.copernicus.eu> e clique em **Register**.
-2. Preencha os dados e **confirme o e-mail de ativação**.
-
-::: {.callout-warning}
-Sem confirmar o e-mail, o login não completa — é a causa mais comum de erro `401`/`403`.
+::: {.callout-note}
+## Comece por aqui
+Esta página é o **coração do repositório**: é onde você obtém as credenciais que vão
+no `.env`. Siga os passos na ordem e preencha cada campo.
 :::
 
-## 1.2 Criar o OAuth client (para as séries)
+O **Copernicus Data Space Ecosystem (CDSE)** oferece **dois tipos de autenticação**,
+usados por partes diferentes do código:
 
-A **Statistical API** (usada nas séries diária e mensal) autentica com um
-**OAuth client**:
+| Tipo | O que é | Serve para | Variáveis no `.env` |
+|---|---|---|---|
+| **OAuth client** | `client_id` + `client_secret` | Statistical API (séries) | `CDSE_CLIENT_ID`, `CDSE_CLIENT_SECRET` |
+| **Login da conta** | e-mail + senha | OData (catálogo e L2 cru) | `CDSE_USERNAME`, `CDSE_PASSWORD` |
 
-1. Abra <https://shapps.dataspace.copernicus.eu/dashboard/#/account/settings>.
-2. Em **User settings → OAuth clients**, clique em **Create**.
-3. Escolha **"Never expire"** (evita precisar renovar) e confirme.
-4. Copie o **client_id** e o **client_secret**.
+## Passo 1 — Criar a conta
+
+1. Acesse <https://dataspace.copernicus.eu> e clique em **Register** (canto superior).
+2. Preencha e-mail, senha e dados. **Confirme o e-mail de ativação** que chega na
+   caixa de entrada (verifique o *spam*).
+3. Faça login em <https://dataspace.copernicus.eu>.
+
+::: {.callout-warning}
+Sem confirmar o e-mail, o login **não completa** — é a causa mais comum de erro
+`401`/`403` depois.
+:::
+
+## Passo 2 — Criar o OAuth client (para as séries)
+
+1. Abra o painel de configurações:
+   <https://shapps.dataspace.copernicus.eu/dashboard/#/account/settings>
+   (faça login com a mesma conta).
+2. No menu lateral, entre em **User settings → OAuth clients**.
+3. Clique em **Create**.
+4. Dê um nome (ex.: `tropomi-ch4`) e escolha a validade. Recomendado:
+   **Never expire** (evita ter de renovar).
+5. Clique em **Create** novamente. O painel mostra o **client_id** e o
+   **client_secret**.
 
 ::: {.callout-important}
-O **client_secret** aparece **uma única vez**. Guarde-o com cuidado. Se perder,
+O **client_secret aparece uma única vez**. Copie e guarde agora. Se perder,
 exclua o client e crie outro.
 :::
 
-Coloque os valores no seu `.env`:
+Copie os dois valores para o `.env`:
 
 ```bash
-CDSE_CLIENT_ID=seu-client-id
-CDSE_CLIENT_SECRET=seu-client-secret
+CDSE_CLIENT_ID=cole-o-client-id-aqui
+CDSE_CLIENT_SECRET=cole-o-client-secret-aqui
 ```
 
-## 1.3 Login da conta (para o L2 cru)
+## Passo 3 — Login da conta (para o L2 cru)
 
-O download do **L2 cru** (mapas ~1 km) usa o **login normal da conta**
-(e-mail e senha), e **não** o OAuth client:
+O download do **L2 cru** (mapas ~1 km) usa o **login normal**, não o OAuth client.
+Use o **mesmo e-mail e senha** da conta:
 
 ```bash
 CDSE_USERNAME=seu-email@exemplo.com
 CDSE_PASSWORD=sua-senha
 ```
 
-## 1.4 Google Earth Engine (opcional)
+Por baixo, o código autentica com `grant_type=password` e `client_id=cdse-public`
+(é o cliente público do CDSE, não o seu).
 
-Para os mapas via GEE (seção 7), você precisa de uma conta Google com Earth Engine:
+## Passo 4 — Google Earth Engine (opcional)
 
-1. Acesse <https://code.earthengine.google.com/> e faça login.
-2. Aceite os termos e registre um **Cloud Project**.
-3. Anote o **Project ID** (ex.: `meu-projeto-123456`) e coloque no `.env`
-   como `GEE_PROJECT`.
+Só é necessário para os mapas via GEE (página 7):
 
-## Resumo das credenciais
+1. Acesse <https://code.earthengine.google.com/> e faça login com a conta Google.
+2. Aceite os termos e **registre um Cloud Project** quando solicitado.
+3. Anote o **Project ID** (ex.: `meu-projeto-123456`).
 
-| Uso | Variável no `.env` | Onde conseguir |
+```bash
+GEE_PROJECT=seu-project-id
+GEE_DRIVE_FOLDER=CH4_TROPOMI_Brasil
+```
+
+## Resumo: onde conseguir cada variável
+
+| Variável no `.env` | O que é | Onde conseguir |
 |---|---|---|
-| Séries (Statistical API) | `CDSE_CLIENT_ID`, `CDSE_CLIENT_SECRET` | OAuth clients no dashboard |
-| L2 cru (mapas ~1 km) | `CDSE_USERNAME`, `CDSE_PASSWORD` | login da conta |
-| Google Earth Engine | `GEE_PROJECT` | Cloud Project no GEE |
+| `CDSE_CLIENT_ID` | ID do OAuth client | Dashboard → *User settings → OAuth clients* |
+| `CDSE_CLIENT_SECRET` | Segredo do OAuth client | idem (mostrado **uma vez**) |
+| `CDSE_USERNAME` | E-mail da conta | o mesmo do cadastro no CDSE |
+| `CDSE_PASSWORD` | Senha da conta | o mesmo do cadastro no CDSE |
+| `GEE_PROJECT` | ID do projeto no Earth Engine | <https://code.earthengine.google.com/> |
+| `CDSE_*_URL` | Links da API | página [Links da API](02-links-api.qmd) |
+
+## Problemas comuns
+
+| Sintoma | Causa provável | Solução |
+|---|---|---|
+| `401` no login | e-mail não confirmado | confirme o e-mail e tente de novo |
+| `401`/`403` nas séries | `client_id`/`secret` errados | recopie ou recrie o OAuth client |
+| `client_secret` perdido | mostrado só uma vez | exclua o client e crie outro |
+| `404` no L2 | ID de produto/endpoint errado | confira na página [Links da API](02-links-api.qmd) |
+
+::: {.callout-tip}
+Dica: se quiser, insira capturas de tela desta página (dashboard, botão *Create*,
+campos `client_id`/`client_secret`) para deixar o guia ainda mais visual.
+:::
