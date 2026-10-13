@@ -10,9 +10,9 @@ produto **L2 cru** (`L2__CH4___`), que traz cada órbita como um arquivo.
 ::: {.callout-important}
 ### Baixa o arquivo COMPLETO → recorta na máscara do Brasil → **EXCLUI o completo**
 
-O fluxo baixa o **granule completo** (um arquivo `.nc` de ~70 MB, cobrindo uma
-faixa do mundo), usa apenas os pixels da **região do Brasil**, acumula a média
-mensal e **apaga o arquivo completo** logo em seguida.
+O fluxo baixa o **granule completo** (um arquivo de ~70 MB, cobrindo uma faixa
+do mundo), usa apenas os pixels da **região do Brasil**, acumula a média mensal
+e **apaga o arquivo completo** logo em seguida.
 
 Ou seja: **o arquivo cheio é temporário**. O que fica salvo é só o **GeoTIFF
 mensal já recortado** (~1 km). Por isso, mesmo processando meses de dados, o
@@ -28,15 +28,24 @@ Extras importantes:
 
 ## Pré-requisitos
 
-```bash
-pip install -e ".[l2]"
-```
-
 Configure o login da conta no `.env` (`CDSE_USERNAME`, `CDSE_PASSWORD`) — veja
 [Conta Copernicus](01-conta-copernicus.qmd).
 
+::: {.lang-python}
+```bash
+pip install -e ".[l2]"
+```
+:::
+
+::: {.lang-r}
+```r
+install.packages(c("ncdf4", "terra"))
+```
+:::
+
 ## Código
 
+::: {.lang-python}
 ```python
 from tropomi_ch4 import l2
 
@@ -49,6 +58,21 @@ media = l2.build_monthly_geotiff(
 )
 print("CH4 médio (ppb):", media)
 ```
+:::
+
+::: {.lang-r}
+```r
+source("r/mapas_l2.R")
+
+# Um mês de teste (limite o nº de granules)
+l2_mes(
+  ano = 2022, mes = 1,
+  out_tif = "data/CH4_2022_01.tif",
+  res = 0.01,          # ~1 km
+  max_granules = 5     # remova/None para o mês todo
+)
+```
+:::
 
 Para vários meses, repita num laço. O GeoTIFF sai em `EPSG:4326`, com
 `nodata=NaN` e compressão *deflate*.
@@ -57,10 +81,15 @@ Para vários meses, repita num laço. O GeoTIFF sai em `EPSG:4326`, com
 
 1. `list_granules` lista os granules do mês no catálogo OData.
 2. `download` baixa o granule completo (streaming).
-3. `accumulate_granule` lê `methane_mixing_ratio_bias_corrected` e `qa_value`,
-   filtra por qualidade e **acumula só os pixels do Brasil** (recorte).
-4. O granule completo é **apagado** (`finally: fn.unlink()`).
+3. A rotina lê `methane_mixing_ratio_bias_corrected` e `qa_value`, filtra por
+   qualidade e **acumula só os pixels do Brasil** (recorte).
+4. O granule completo é **apagado**.
 5. No fim do mês, a média acumulada vira o **GeoTIFF recortado**.
+
+::: {.callout-note}
+No R, o script `r/mapas_l2.R` é **beta/avançado** (usa `ncdf4` + `terra`). A
+rotina Python fica em `tropomi_ch4/l2.py`.
+:::
 
 ::: {.callout-note}
 A Statistical API (séries) não entrega bons **mapas** para o S5P: a cobertura

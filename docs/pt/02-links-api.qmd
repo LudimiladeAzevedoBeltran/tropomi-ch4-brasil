@@ -46,6 +46,7 @@ Se um link mudar, consulte a documentação e atualize o `.env`:
 
 ### 1) Token (OAuth client)
 
+::: {.lang-python}
 ```python
 from tropomi_ch4.config import get_credentials, endpoints
 import requests
@@ -57,30 +58,52 @@ r = requests.post(endpoints()["token"], data={
     "client_secret": creds.client_secret,
 }, timeout=60)
 print(r.status_code)                 # 200 = ok
-print(r.json().get("access_token", "")[:20], "...")
 ```
+:::
+
+::: {.lang-r}
+```r
+source("r/tropomi_ch4.R")
+tok <- cdse_token()
+cat(substr(tok, 1, 20), "...\n")
+```
+:::
 
 ### 2) Statistical API (séries)
 
+::: {.lang-python}
 ```python
 import tropomi_ch4 as tch4
 df = tch4.monthly(start="2022-01-01", end="2022-03-01")
 print(df.head())
 ```
+:::
+
+::: {.lang-r}
+```r
+source("r/tropomi_ch4.R")
+df <- ch4_mensal("2022-01-01", "2022-03-01")
+head(df)
+```
+:::
 
 ### 3) Catálogo OData (L2)
 
+::: {.lang-python}
 ```python
 from tropomi_ch4 import l2
 print(len(l2.list_granules(2022, 1)), "granules em 2022-01")
 ```
+:::
 
-### 4) Download OData
-
-Coberto por `l2.build_monthly_geotiff(...)` (baixa, recorta e apaga o arquivo
-completo — ver [Mapas com L2 cru](06-mapas-l2.qmd)).
+::: {.lang-r}
+```r
+source("r/mapas_l2.R")
+cat(length(l2_granules(2022, 1)), "granules em 2022-01\n")
+```
+:::
 
 ::: {.callout-note}
-Se `endpoints()` reclamar de "Endpoints nao definidos", é porque o `.env` ainda
-tem `INSIRA_AQUI`. Preencha os quatro valores acima.
+Se `endpoints()` (Python) ou as funções R reclamarem de variáveis faltando, é porque o
+`.env` ainda tem `INSIRA_AQUI`. Preencha os quatro valores acima.
 :::

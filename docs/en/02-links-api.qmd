@@ -35,18 +35,16 @@ These are **public** API addresses (not secrets). They are not pre-filled in the
 
 ## Where to confirm (official docs)
 
-If a link changes, check the docs and update `.env`:
-
 - **CDSE documentation:** <https://documentation.dataspace.copernicus.eu>
   - OData (catalog and download): <https://documentation.dataspace.copernicus.eu/APIs/OData.html>
   - Sentinel Hub (Statistical API): <https://documentation.dataspace.copernicus.eu/APIs/SentinelHub.html>
 - **Sentinel Hub — Statistical API:** <https://docs.sentinel-hub.com/api/latest/api/statistical/>
-  (these pages are moving to `docs.planet.com`; use the CDSE pages as the main reference).
 
 ## How to test each piece
 
 ### 1) Token (OAuth client)
 
+::: {.lang-python}
 ```python
 from tropomi_ch4.config import get_credentials, endpoints
 import requests
@@ -59,23 +57,46 @@ r = requests.post(endpoints()["token"], data={
 }, timeout=60)
 print(r.status_code)                 # 200 = ok
 ```
+:::
+
+::: {.lang-r}
+```r
+source("r/tropomi_ch4.R")
+tok <- cdse_token()
+cat(substr(tok, 1, 20), "...\n")
+```
+:::
 
 ### 2) Statistical API (series)
 
+::: {.lang-python}
 ```python
 import tropomi_ch4 as tch4
 df = tch4.monthly(start="2022-01-01", end="2022-03-01")
 print(df.head())
 ```
+:::
+
+::: {.lang-r}
+```r
+source("r/tropomi_ch4.R")
+df <- ch4_mensal("2022-01-01", "2022-03-01")
+head(df)
+```
+:::
 
 ### 3) OData catalog (L2)
 
+::: {.lang-python}
 ```python
 from tropomi_ch4 import l2
 print(len(l2.list_granules(2022, 1)), "granules in 2022-01")
 ```
+:::
 
-### 4) OData download
-
-Covered by `l2.build_monthly_geotiff(...)` (downloads, crops, and deletes the
-complete file — see [Raw L2 maps](06-mapas-l2.qmd)).
+::: {.lang-r}
+```r
+source("r/mapas_l2.R")
+cat(length(l2_granules(2022, 1)), "granules in 2022-01\n")
+```
+:::

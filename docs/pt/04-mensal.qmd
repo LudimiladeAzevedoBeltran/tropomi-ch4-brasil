@@ -7,6 +7,7 @@ Média **mensal** (`P1M`) de CH4 sobre o Brasil. Diferente da diária, cabe em
 
 ## Código
 
+::: {.lang-python}
 ```python
 import tropomi_ch4 as tch4
 from tropomi_ch4 import plot
@@ -17,15 +18,36 @@ df.to_csv("serie_mensal_ch4_brasil.csv", index=False)
 plot.plot_series(df, title="CH4 médio mensal no Brasil — TROPOMI",
                  outfile="serie_mensal_ch4_brasil.png")
 ```
+:::
+
+::: {.lang-r}
+```r
+source("r/tropomi_ch4.R")
+
+mensal <- ch4_mensal("2019-01-01")   # até o mês atual
+write.csv(mensal, "serie_mensal_ch4_brasil.csv", row.names = FALSE)
+
+plot(mensal$data, mensal$ch4_ppb, type = "o", pch = 20, col = "darkred",
+     xlab = "Ano", ylab = "CH4 (ppb)", main = "CH4 mensal no Brasil — TROPOMI")
+```
+:::
 
 ## Filtro de meses fracos
 
 Alguns meses têm poucos pixels válidos. É boa prática descartá-los antes de
 analisar:
 
+::: {.lang-python}
 ```python
 df_bom = df[df["n_validos"] > 200]
 ```
+:::
+
+::: {.lang-r}
+```r
+mensal_bom <- subset(mensal, n_validos > 200)
+```
+:::
 
 ## Diária vs. mensal
 

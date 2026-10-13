@@ -37,6 +37,11 @@ tropomi-ch4-brasil/
 │  ├─ 03_anual.ipynb
 │  ├─ 04_mapas_l2.ipynb    # L2 cru (baixa completo -> recorta -> apaga completo)
 │  └─ 05_mapas_gee.ipynb   # GEE (exige cota/créditos; pode demorar meses)
+├─ r/                     # versão em R (espelha o pacote Python)
+│  ├─ tropomi_ch4.R        # funções de séries (P1D/P1M/anual)
+│  ├─ exemplo_series.R     # roda as 3 escalas e salva CSV + figura
+│  ├─ mapas_l2.R           # L2 cru -> GeoTIFF (~1 km), beta/avançado
+│  └─ gee_rgee.R           # Earth Engine no R (rgee)
 ├─ docs/                  # site (Quarto) em PT e EN
 ├─ data/                  # dados de exemplo (não versionar dados grandes)
 ├─ requirements.txt

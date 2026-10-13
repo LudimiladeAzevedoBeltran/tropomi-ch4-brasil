@@ -8,12 +8,14 @@ The Statistical API aggregates on the server: you get the series ready, without
 downloading images.
 
 ::: {.callout-note}
-Not every day has an observation. Coverage increases over the years (it starts
-lower in 2019 and approaches 100% in recent years).
+Pick a language in the **"Linguagem do código"** selector (top of the side index or
+in the navbar). The choice applies to the **whole site** and is remembered across
+pages.
 :::
 
 ## Code
 
+::: {.lang-python}
 ```python
 import tropomi_ch4 as tch4
 from tropomi_ch4 import plot
@@ -25,6 +27,21 @@ df.to_csv("serie_diaria_ch4_brasil.csv", index=False)
 plot.plot_series(df, title="Daily mean CH4 over Brazil — TROPOMI",
                  outfile="serie_diaria_ch4_brasil.png")
 ```
+:::
+
+::: {.lang-r}
+```r
+source("r/tropomi_ch4.R")   # ch4_diaria(), ch4_mensal(), ch4_anual()
+
+# One request per year (more robust to failures)
+diaria <- ch4_diaria("2019-01-01")   # up to today
+write.csv(diaria, "serie_diaria_ch4_brasil.csv", row.names = FALSE)
+
+mensal <- aggregate(ch4_ppb ~ format(data, "%Y-%m"), data = diaria, FUN = mean, na.rm = TRUE)
+plot(as.Date(paste0(mensal[[1]], "-01")), mensal$ch4_ppb, type = "l", col = "darkred",
+     xlab = "Year", ylab = "CH4 (ppb)", main = "Daily CH4 over Brazil — TROPOMI")
+```
+:::
 
 Columns:
 
@@ -34,5 +51,11 @@ Columns:
 | `ch4_ppb` | mean CH4 (ppb) over Brazil |
 | `n_validos` | number of valid pixels |
 | `ano`, `mes` | helpers |
+
+## Under the hood
+
+The call uses the **Statistical API** with the Brazil box, the period and an
+**evalscript** that reads the `CH4` band (quality-filtered) and computes the mean.
+The implementation lives in `tropomi_ch4/` (Python) and `r/tropomi_ch4.R` (R).
 
 Notebook: [`notebooks/01_diaria.ipynb`](https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil/blob/main/notebooks/01_diaria.ipynb).

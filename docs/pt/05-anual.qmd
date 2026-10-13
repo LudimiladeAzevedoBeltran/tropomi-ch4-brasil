@@ -7,6 +7,7 @@ Aqui ela é **derivada da mensal** (média dos meses válidos de cada ano).
 
 ## Código
 
+::: {.lang-python}
 ```python
 import tropomi_ch4 as tch4
 from tropomi_ch4 import plot
@@ -17,8 +18,21 @@ df.to_csv("serie_anual_ch4_brasil.csv", index=False)
 plot.plot_series(df, title="CH4 médio anual no Brasil — TROPOMI",
                  outfile="serie_anual_ch4_brasil.png")
 ```
+:::
 
-`tch4.annual` internamente chama a série mensal e agrupa por ano:
+::: {.lang-r}
+```r
+source("r/tropomi_ch4.R")
+
+anual <- ch4_anual("2019-01-01")
+write.csv(anual, "serie_anual_ch4_brasil.csv", row.names = FALSE)
+
+plot(anual$ano, anual$ch4_ppb, type = "o", pch = 20, col = "darkred",
+     xlab = "Ano", ylab = "CH4 (ppb)", main = "CH4 anual no Brasil — TROPOMI")
+```
+:::
+
+A série anual é a média dos meses válidos de cada ano:
 
 $$
 \overline{CH4}_{ano} = \frac{1}{n}\sum_{m \in \text{meses válidos}} CH4_{m}
@@ -36,7 +50,7 @@ Por isso, o caminho recomendado é derivar o anual do mensal:
 - você controla como tratar meses faltantes;
 - a média anual fica reprodutível a partir da série mensal.
 
-Se o `P1Y` funcionar no seu teste, use-o; a função `annual` pode ser trocada por
-uma chamada direta a `statistical_series("P1Y", ...)`.
+Se o `P1Y` funcionar no seu teste, use-o; basta trocar o intervalo na chamada
+(`"P1Y"` em vez de `"P1M"`).
 
 Notebook pronto: [`notebooks/03_anual.ipynb`](https://github.com/LudimiladeAzevedoBeltran/tropomi-ch4-brasil/blob/main/notebooks/03_anual.ipynb).

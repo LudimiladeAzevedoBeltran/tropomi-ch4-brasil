@@ -8,6 +8,7 @@ a **single request** for the whole period.
 
 ## Code
 
+::: {.lang-python}
 ```python
 import tropomi_ch4 as tch4
 from tropomi_ch4 import plot
@@ -18,14 +19,33 @@ df.to_csv("serie_mensal_ch4_brasil.csv", index=False)
 plot.plot_series(df, title="Monthly mean CH4 over Brazil — TROPOMI",
                  outfile="serie_mensal_ch4_brasil.png")
 ```
+:::
+
+::: {.lang-r}
+```r
+source("r/tropomi_ch4.R")
+
+mensal <- ch4_mensal("2019-01-01")   # up to current month
+write.csv(mensal, "serie_mensal_ch4_brasil.csv", row.names = FALSE)
+
+plot(mensal$data, mensal$ch4_ppb, type = "o", pch = 20, col = "darkred",
+     xlab = "Year", ylab = "CH4 (ppb)", main = "Monthly CH4 over Brazil — TROPOMI")
+```
+:::
 
 ## Filtering weak months
 
-Some months have few valid pixels. It is good practice to drop them:
-
+::: {.lang-python}
 ```python
 df_bom = df[df["n_validos"] > 200]
 ```
+:::
+
+::: {.lang-r}
+```r
+mensal_bom <- subset(mensal, n_validos > 200)
+```
+:::
 
 ## Daily vs. monthly
 
